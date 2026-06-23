@@ -1,0 +1,10 @@
+# HyperBRIDGE — Python-afhankelijkheden (macOS, getest met Python 3.12)
+Flask==3.1.3
+mediapipe==0.10.35
+numpy==2.4.5
+opencv-python==4.13.0.92
+PyAutoGUI==0.9.54
+pyobjc-core==12.1
+pyobjc-framework-Quartz==12.1
+pyserial==3.5
+websockets==16.0

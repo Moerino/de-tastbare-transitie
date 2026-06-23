@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+    <title>Motor Control</title>
+
+    <style>
+
+        body {
+
+            background: #111;
+            color: white;
+
+            font-family: Arial;
+
+            text-align: center;
+
+            padding-top: 60px;
+        }
+
+        h1 {
+
+            margin-bottom: 40px;
+        }
+
+        button {
+
+            width: 220px;
+            height: 80px;
+
+            font-size: 24px;
+
+            margin: 15px;
+
+            border: none;
+
+            border-radius: 12px;
+
+            cursor: pointer;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <h1>ESP32 Motor Control</h1>
+
+    <button onclick="send('SPEED1')">
+        SPEED 1
+    </button>
+
+    <br>
+
+    <button onclick="send('SPEED2')">
+        SPEED 2
+    </button>
+
+    <br>
+
+    <button onclick="send('SPEED3')">
+        SPEED 3
+    </button>
+
+    <br>
+
+    <button onclick="send('OFF')">
+        OFF
+    </button>
+
+    <script>
+
+        async function send(cmd) {
+
+            try {
+
+                const response =
+                    await fetch(
+                        "http://127.0.0.1:5001/api/" + cmd
+                    );
+
+                console.log(await response.text());
+
+            } catch(err) {
+
+                console.error(err);
+            }
+        }
+
+    </script>
+
+</body>
+
+</html>

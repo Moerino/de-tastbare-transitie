@@ -1,0 +1,332 @@
+{
+  "results": [
+    {
+      "test": {
+        "name": "01-default-wit",
+        "radius": 33,
+        "color": [
+          255,
+          255,
+          255
+        ],
+        "threshold": 25,
+        "min_blob": 20,
+        "settle_frames": 18,
+        "grace_s": 0.9,
+        "invert": false
+      },
+      "top": {
+        "detected": false,
+        "reason": "max_diff=0 < threshold=25",
+        "max_diff": 0,
+        "mean_diff": 0.0
+      },
+      "side": {
+        "x": 890.2,
+        "y": 837.2,
+        "area": 9144.5,
+        "detected": true,
+        "max_diff": 81,
+        "mean_diff": 2.34
+      }
+    },
+    {
+      "test": {
+        "name": "02-grote-wit",
+        "radius": 80,
+        "color": [
+          255,
+          255,
+          255
+        ],
+        "threshold": 25,
+        "min_blob": 40,
+        "settle_frames": 18,
+        "grace_s": 0.9,
+        "invert": false
+      },
+      "top": {
+        "detected": false,
+        "reason": "max_diff=0 < threshold=25",
+        "max_diff": 0,
+        "mean_diff": 0.0
+      },
+      "side": {
+        "x": 990.6,
+        "y": 711.8,
+        "area": 3075.0,
+        "detected": true,
+        "max_diff": 86,
+        "mean_diff": 9.86
+      }
+    },
+    {
+      "test": {
+        "name": "03-huge-wit-soft",
+        "radius": 150,
+        "color": [
+          255,
+          255,
+          255
+        ],
+        "threshold": 10,
+        "min_blob": 80,
+        "settle_frames": 18,
+        "grace_s": 0.9,
+        "invert": false
+      },
+      "top": {
+        "detected": false,
+        "reason": "max_diff=0 < threshold=10",
+        "max_diff": 0,
+        "mean_diff": 0.0
+      },
+      "side": {
+        "x": 990.8,
+        "y": 713.6,
+        "area": 10247.0,
+        "detected": true,
+        "max_diff": 73,
+        "mean_diff": 2.5
+      }
+    },
+    {
+      "test": {
+        "name": "04-magenta-mid",
+        "radius": 100,
+        "color": [
+          255,
+          0,
+          255
+        ],
+        "threshold": 15,
+        "min_blob": 60,
+        "settle_frames": 18,
+        "grace_s": 0.9,
+        "invert": false
+      },
+      "top": {
+        "detected": false,
+        "reason": "max_diff=0 < threshold=15",
+        "max_diff": 0,
+        "mean_diff": 0.0
+      },
+      "side": {
+        "x": 990.7,
+        "y": 712.1,
+        "area": 4718.5,
+        "detected": true,
+        "max_diff": 78,
+        "mean_diff": 2.12
+      }
+    },
+    {
+      "test": {
+        "name": "05-cyaan-mid",
+        "radius": 100,
+        "color": [
+          255,
+          255,
+          0
+        ],
+        "threshold": 15,
+        "min_blob": 60,
+        "settle_frames": 18,
+        "grace_s": 0.9,
+        "invert": false
+      },
+      "top": {
+        "detected": false,
+        "reason": "max_diff=0 < threshold=15",
+        "max_diff": 0,
+        "mean_diff": 0.0
+      },
+      "side": {
+        "x": 990.4,
+        "y": 712.0,
+        "area": 4845.0,
+        "detected": true,
+        "max_diff": 66,
+        "mean_diff": 2.03
+      }
+    },
+    {
+      "test": {
+        "name": "06-geel-mid",
+        "radius": 100,
+        "color": [
+          0,
+          255,
+          255
+        ],
+        "threshold": 15,
+        "min_blob": 60,
+        "settle_frames": 18,
+        "grace_s": 0.9,
+        "invert": false
+      },
+      "top": {
+        "detected": false,
+        "reason": "max_diff=0 < threshold=15",
+        "max_diff": 0,
+        "mean_diff": 0.0
+      },
+      "side": {
+        "x": 990.5,
+        "y": 712.3,
+        "area": 4757.0,
+        "detected": true,
+        "max_diff": 70,
+        "mean_diff": 2.03
+      }
+    },
+    {
+      "test": {
+        "name": "07-rood-mid",
+        "radius": 100,
+        "color": [
+          0,
+          0,
+          255
+        ],
+        "threshold": 15,
+        "min_blob": 60,
+        "settle_frames": 18,
+        "grace_s": 0.9,
+        "invert": false
+      },
+      "top": {
+        "detected": false,
+        "reason": "max_diff=0 < threshold=15",
+        "max_diff": 0,
+        "mean_diff": 0.0
+      },
+      "side": {
+        "x": 990.1,
+        "y": 712.3,
+        "area": 4575.5,
+        "detected": true,
+        "max_diff": 63,
+        "mean_diff": 1.98
+      }
+    },
+    {
+      "test": {
+        "name": "08-soft-traag",
+        "radius": 100,
+        "color": [
+          255,
+          255,
+          255
+        ],
+        "threshold": 5,
+        "min_blob": 60,
+        "settle_frames": 36,
+        "grace_s": 2.0,
+        "invert": false
+      },
+      "top": {
+        "detected": false,
+        "reason": "max_diff=0 < threshold=5",
+        "max_diff": 0,
+        "mean_diff": 0.0
+      },
+      "side": {
+        "x": 991.1,
+        "y": 712.3,
+        "area": 5554.5,
+        "detected": true,
+        "max_diff": 70,
+        "mean_diff": 2.09
+      }
+    },
+    {
+      "test": {
+        "name": "09-max-wit-soft",
+        "radius": 250,
+        "color": [
+          255,
+          255,
+          255
+        ],
+        "threshold": 5,
+        "min_blob": 100,
+        "settle_frames": 36,
+        "grace_s": 2.0,
+        "invert": false
+      },
+      "top": {
+        "detected": false,
+        "reason": "max_diff=0 < threshold=5",
+        "max_diff": 0,
+        "mean_diff": 0.0
+      },
+      "side": {
+        "x": 892.8,
+        "y": 300.7,
+        "area": 248107.5,
+        "detected": true,
+        "max_diff": 69,
+        "mean_diff": 4.61
+      }
+    },
+    {
+      "test": {
+        "name": "10-inverted-zwart",
+        "radius": 120,
+        "color": [
+          0,
+          0,
+          0
+        ],
+        "threshold": 15,
+        "min_blob": 60,
+        "settle_frames": 18,
+        "grace_s": 0.9,
+        "invert": false
+      },
+      "top": {
+        "detected": false,
+        "reason": "max_diff=0 < threshold=15",
+        "max_diff": 0,
+        "mean_diff": 0.0
+      },
+      "side": {
+        "x": 926.7,
+        "y": 255.3,
+        "area": 1587.0,
+        "detected": true,
+        "max_diff": 46,
+        "mean_diff": 3.3
+      }
+    }
+  ],
+  "best": {
+    "top_best": null,
+    "side_best": {
+      "name": "02-grote-wit",
+      "params": {
+        "name": "02-grote-wit",
+        "radius": 80,
+        "color": [
+          255,
+          255,
+          255
+        ],
+        "threshold": 25,
+        "min_blob": 40,
+        "settle_frames": 18,
+        "grace_s": 0.9,
+        "invert": false
+      },
+      "result": {
+        "x": 990.6,
+        "y": 711.8,
+        "area": 3075.0,
+        "detected": true,
+        "max_diff": 86,
+        "mean_diff": 9.86
+      }
+    }
+  }
+}
