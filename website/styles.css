@@ -1,0 +1,763 @@
+:root {
+  --bg: #0f172a;
+  --panel: rgba(10, 23, 46, 0.55);
+  --card: rgba(12, 23, 40, 0.42);
+  --text: #f1f5f9;
+  --muted: #cbd5e1;
+  --line: rgba(148, 163, 184, 0.35);
+  --primary: #22c55e;
+  --accent: #38bdf8;
+  --warning: #f59e0b;
+  --danger: #ef4444;
+  --gasoline: #2ba84a;   /* green — matches icon */
+  --plane:    #e13434;   /* red — matches icon */
+  --train:    #e2b400;   /* yellow/gold — matches icon */
+  --hyperloop:#2a75bb;   /* blue — matches icon */
+  --impact-gradient: linear-gradient(90deg, #22c55e 0%, #f59e0b 50%, #ef4444 100%);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  font-family: Inter, "Segoe UI", sans-serif;
+  color: var(--text);
+  background: var(--bg);
+}
+
+.app {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.leaflet-container .leaflet-interactive:focus,
+.leaflet-container svg path:focus {
+  outline: none;
+}
+
+h1,
+h2,
+h3 {
+  margin: 0;
+}
+
+.card {
+  background: var(--card);
+  backdrop-filter: blur(4px);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  padding: 12px;
+}
+
+.card h2 {
+  margin-bottom: 8px;
+  font-size: 1.9rem;
+}
+
+.map {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  /* Browser-gestures uit op de map zodat de PointerEvents van touch-bridge
+     ongehinderd naar Leaflet doorkomen voor pinch-zoom. */
+  touch-action: none;
+}
+
+.leaflet-container {
+  /* Idem op de Leaflet-container zelf — Leaflet zet zijn eigen className
+     hierop, dus deze regel dekt zowel de outer .map als de Leaflet-DOM. */
+  touch-action: none;
+}
+
+.brand-logo {
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 5;
+  width: 118px;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.4));
+}
+
+.overlay {
+  position: absolute;
+  z-index: 5;
+}
+
+.top-actions {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  display: none;
+  gap: 8px;
+  z-index: 6;
+}
+
+.compare-overlay {
+  right: 16px;
+  top: 54px;
+  width: min(360px, 30vw);
+  max-height: calc(100vh - 110px);
+}
+
+.compare-card {
+  max-height: inherit;
+  overflow: auto;
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+  padding: 0;
+}
+
+.compare-card h2 {
+  display: none;
+}
+
+.route-overlay {
+  left: 50%;
+  bottom: 34px;
+  transform: translateX(-50%);
+  width: min(230px, 26vw);
+  padding: 0;
+  background: transparent;
+  border: 0;
+  backdrop-filter: none;
+}
+
+.route-overlay h2,
+.route-overlay label {
+  display: none !important;
+}
+
+.route-legend {
+  margin: 0 0 8px;
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: #111827;
+  font-size: 0.58rem;
+  background: rgba(255, 255, 255, 0.62);
+  border: 1px solid rgba(15, 23, 42, 0.22);
+  border-radius: 999px;
+  padding: 2px 6px;
+}
+
+.legend-line {
+  display: inline-block;
+  width: 16px;
+  height: 2px;
+  border-radius: 999px;
+}
+
+.legend-line-hyperloop {
+  background: var(--hyperloop);
+}
+
+.legend-line-train {
+  background: var(--train);
+}
+
+.legend-line-gasoline {
+  background: var(--gasoline);
+}
+
+.legend-line-plane {
+  background: var(--plane);
+}
+
+.segment-label-marker {
+  background: transparent;
+  border: 0;
+}
+
+.segment-label-chip {
+  display: inline-block;
+  padding: 2px 6px;
+  border-radius: 999px;
+  background: rgba(17, 24, 39, 0.82);
+  color: #f8fafc;
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: lowercase;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+}
+
+.segment-label-chip--train {
+  background: rgba(17, 24, 39, 0.92);
+  color: #fef9c3;
+  border: 1px solid rgba(245, 207, 39, 0.85);
+}
+
+.segment-label-chip--hyperloop {
+  background: rgba(17, 24, 39, 0.92);
+  color: #ffedd5;
+  border: 1px solid rgba(244, 73, 22, 0.9);
+}
+
+.segment-label-chip--plane {
+  background: rgba(17, 24, 39, 0.92);
+  color: #e0f2fe;
+  border: 1px solid rgba(85, 199, 255, 0.9);
+}
+
+.criteria-overlay {
+  right: 16px;
+  bottom: 8px;
+  width: min(250px, 26vw);
+}
+
+.map-controls {
+  right: 16px;
+  top: 16px;
+  z-index: 8;
+}
+
+.tracking-banner {
+  position: absolute;
+  left: 50%;
+  top: 16px;
+  transform: translateX(-50%);
+  background: var(--warning);
+  color: #111827;
+  padding: 8px 12px;
+  border-radius: 999px;
+  z-index: 600;
+  font-weight: 600;
+}
+
+.hidden {
+  display: none;
+}
+
+label {
+  display: block;
+  margin: 8px 0 6px;
+  color: #111827;
+  font-size: 2rem;
+  text-align: center;
+}
+
+input {
+  width: 100%;
+  /* Volledig opaak: Neutral 50 met Neutral 900 tekst (design system). */
+  background: #fafafa;
+  border: 1px solid #d4d4d4; /* Neutral 300 */
+  color: #171717; /* Neutral 900 */
+  border-radius: 22px;
+  padding: 5px 12px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-align: center;
+}
+
+input::placeholder {
+  color: #525252; /* Neutral 600 — donker genoeg om leesbaar te zijn op witte bg */
+  opacity: 1;
+  font-weight: 500;
+}
+
+input:focus-visible {
+  outline: 2px solid #f6653a; /* Primary 500 */
+  outline-offset: 1px;
+  border-color: #f6653a;
+}
+
+.btn {
+  border: 1px solid rgba(15, 23, 42, 0.35);
+  border-radius: 12px;
+  padding: 3px 9px;
+  min-height: 22px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.68rem;
+}
+
+.btn.primary {
+  background: rgba(255, 255, 255, 0.22);
+  color: #111827;
+}
+
+.btn.secondary {
+  background: rgba(255, 255, 255, 0.2);
+  color: #111827;
+  border: 1px solid rgba(15, 23, 42, 0.35);
+}
+
+.row {
+  margin-top: 6px;
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+}
+
+.hint {
+  color: var(--muted);
+  font-size: 0.9rem;
+  margin-bottom: 0;
+}
+
+.chips {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(52px, 1fr));
+  gap: 4px;
+}
+
+/* Route-overlay inputs zijn al opaak (zie .input-regel). De button-stijlen
+   hieronder zijn nu volledig design-system-conform. */
+.route-overlay input {
+  background: #fafafa;
+}
+
+/* ——— Primary actie-knop: Plan Route (Primary 500 → 600 hover) ——— */
+.route-overlay .btn.primary {
+  background: #f6653a; /* Primary 500 */
+  color: #ffffff;
+  border: 1px solid #c83509; /* Primary 700 */
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  box-shadow: 0 1px 2px rgba(73, 19, 3, 0.25);
+}
+
+.route-overlay .btn.primary:hover,
+.route-overlay .btn.primary:focus-visible {
+  background: #f44916; /* Primary 600 */
+  outline: none;
+}
+
+.route-overlay .btn.primary:active {
+  background: #c83509; /* Primary 700 */
+}
+
+/* ——— Secondary/tertiair: Wissel — wit met Primary-rand ——— */
+.route-overlay .btn.secondary {
+  background: #ffffff;
+  color: #491303; /* Primary 900 */
+  border: 1px solid #f77c58; /* Primary 400 */
+  font-weight: 600;
+}
+
+.route-overlay .btn.secondary:hover,
+.route-overlay .btn.secondary:focus-visible {
+  background: #fff7f5; /* Primary 50 */
+  border-color: #f6653a; /* Primary 500 */
+  outline: none;
+}
+
+/* ——— Filter-chips (Co2, Reistijd, Geluid, Trillingen, Afstand) ——— */
+/* Inactief: zacht roomwit met Primary 100-tint, donkere brand-tekst.
+   Actief : Primary 500 fill met witte tekst en pulse-ring. */
+.chip {
+  background: #fff7f5; /* Primary 50 */
+  border: 1.5px solid #fbbaa6; /* Primary 200 */
+  color: #491303; /* Primary 900 */
+  border-radius: 999px;
+  padding: 4px 10px;
+  text-align: center;
+  cursor: pointer;
+  font-size: 0.7rem;
+  font-weight: 600;
+  line-height: 1.15;
+  transition: background 0.15s ease, color 0.15s ease,
+    border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.chip:hover,
+.chip:focus-visible {
+  background: #fdd9ce; /* Primary 100 */
+  border-color: #f99b7f; /* Primary 300 */
+  outline: none;
+}
+
+.chip.active {
+  background: #f6653a; /* Primary 500 */
+  border-color: #c83509; /* Primary 700 */
+  color: #ffffff;
+  box-shadow: 0 0 0 2px rgba(247, 124, 88, 0.4); /* Primary 400 glow */
+}
+
+.chip.active:hover,
+.chip.active:focus-visible {
+  background: #f44916; /* Primary 600 */
+  border-color: #912607; /* Primary 800 */
+}
+
+.summary {
+  margin: 0;
+  display: grid;
+  gap: 8px;
+}
+
+.summary div {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px dashed var(--line);
+  padding-bottom: 4px;
+}
+
+.summary dt {
+  color: var(--muted);
+}
+
+.comparison-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 6px;
+}
+
+.mode-card {
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-radius: 18px;
+  padding: 0;
+  display: grid;
+  gap: 0;
+  overflow: hidden;
+  background-size: cover;
+  background-position: center;
+  min-height: 0;
+}
+
+.mode-card.hidden {
+  display: none;
+}
+
+.mode-card-photo {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  background-size: cover;
+  background-position: center;
+  min-height: 0;
+}
+
+.mode-card-photo::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  /* Donkerder overlay voor beter contrast op labels (feedback expert TP2 · S2/EV1). */
+  background: rgba(0, 0, 0, 0.72);
+  z-index: 0;
+}
+
+.impact-head {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 2px 10px;
+  font-size: 0.82rem;
+}
+
+.mode-card-body {
+  position: relative;
+  z-index: 1;
+  background: transparent;
+  padding: 5px 10px 8px;
+  color: #f8fafc;
+}
+
+.impact-title {
+  color: inherit;
+  font-size: 0.76rem;
+  font-weight: 700;
+}
+
+.impact-value {
+  color: inherit;
+  font-size: 0.92rem;
+  font-weight: 800;
+}
+
+/* Impact-head: rank+icon links, titel exact gecentreerd, waarde rechts. */
+.impact-head {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.impact-head .impact-rank {
+  flex: 0 0 auto;
+}
+
+.impact-head .impact-label {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+.impact-head .impact-value {
+  margin-left: auto;
+  flex: 0 0 auto;
+}
+
+/* Vervoersmiddel-icoon in de impact-head — dient ook als legenda. */
+.mode-card-icon {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+  flex-shrink: 0;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.35));
+}
+
+/* ——— Eigen suggestion-dropdown (vervangt onbetrouwbare native datalist) ——— */
+.suggest-wrap {
+  position: relative;
+}
+
+.suggest-list {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 100%;
+  margin: 0 0 2px;
+  padding: 0;
+  list-style: none;
+  background: #ffffff;
+  border: 1px solid rgba(15, 23, 42, 0.25);
+  border-radius: 8px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
+  max-height: 220px;
+  overflow-y: auto;
+  z-index: 50;
+}
+
+.suggest-item {
+  padding: 6px 10px;
+  font-size: 0.72rem;
+  color: #111827;
+  cursor: pointer;
+}
+
+.suggest-item:hover,
+.suggest-item:focus-visible {
+  background: rgba(14, 165, 233, 0.18);
+}
+
+.mode-card.selected {
+  box-shadow: inset 0 0 0 2px rgba(56, 189, 248, 0.85);
+}
+
+.mode-name {
+  font-weight: 700;
+  display: none;
+}
+
+.mode-name.gasoline {
+  color: var(--gasoline);
+}
+
+.mode-name.plane {
+  color: var(--plane);
+}
+
+.mode-name.train {
+  color: var(--train);
+}
+
+.mode-name.hyperloop {
+  color: var(--hyperloop);
+}
+
+.metric-row {
+  display: flex;
+  justify-content: space-between;
+  /* Groter en zwaarder voor leesbaarheid op afstand (feedback expert TP2 · S2). */
+  font-size: 0.92rem;
+  line-height: 1.28;
+  font-weight: 600;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.7);
+  padding: 2px 0;
+}
+
+.metric-row strong {
+  font-weight: 800;
+}
+
+.impact-scale {
+  position: relative;
+  height: 8px;
+  border-radius: 999px;
+  background: var(--impact-gradient);
+  overflow: visible;
+  margin-top: 6px;
+}
+
+.impact-marker {
+  position: absolute;
+  top: -2px;
+  width: 4px;
+  height: 12px;
+  border-radius: 4px;
+  background: #e5e7eb;
+  transform: translateX(-50%);
+  box-shadow: 0 0 0 1px rgba(15, 23, 42, 0.6);
+}
+
+.hidden-support {
+  display: none;
+}
+
+.dialog {
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--panel);
+  color: var(--text);
+  min-width: 420px;
+}
+
+.calibration-progress {
+  width: 100%;
+  height: 10px;
+  background: #374151;
+  border-radius: 999px;
+  margin: 10px 0 14px;
+}
+
+.calibration-progress .bar {
+  width: 25%;
+  height: 100%;
+  background: var(--accent);
+  border-radius: inherit;
+}
+
+@media (max-width: 1300px) {
+  .compare-overlay,
+  .criteria-overlay {
+    width: min(300px, 44vw);
+  }
+
+  .route-overlay {
+    width: min(330px, 48vw);
+  }
+
+  .metric-row {
+    font-size: 0.7rem;
+  }
+
+  .mode-name {
+    font-size: 0;
+  }
+
+  input,
+  .chip {
+    font-size: 1rem;
+  }
+}
+
+.map-back-link {
+  position: fixed;
+  top: 14px;
+  left: 14px;
+  z-index: 550;
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.9);
+  color: #111827;
+  font-weight: 600;
+  font-size: 0.78rem;
+  text-decoration: none;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.22);
+}
+
+.map-back-link:hover,
+.map-back-link:focus-visible {
+  background: #fff;
+  outline: 2px solid rgba(56, 189, 248, 0.8);
+  outline-offset: 2px;
+}
+
+body.map-embed-preview .map-back-link {
+  display: none !important;
+}
+
+/* Ingebedde kaart op gevolgen.html: vooral de kaart tonen */
+body.map-embed-preview .compare-overlay,
+body.map-embed-preview .criteria-overlay,
+body.map-embed-preview .route-overlay,
+body.map-embed-preview .brand-logo,
+body.map-embed-preview .top-actions,
+body.map-embed-preview .tracking-banner {
+  display: none !important;
+}
+
+body.map-embed-preview .map-controls {
+  top: auto;
+  bottom: 12px;
+  right: 12px;
+}
+
+/* Idle-timeout dialoog (map-app.html) */
+.idle-dialog {
+  border: none;
+  border-radius: 18px;
+  padding: 22px 26px;
+  max-width: 400px;
+  background: rgba(15, 23, 42, 0.96);
+  color: #f1f5f9;
+  font-family: Inter, "Segoe UI", sans-serif;
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.55);
+}
+
+.idle-dialog::backdrop {
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.idle-dialog h2 {
+  margin: 0 0 10px;
+  font-size: 1.35rem;
+  text-align: center;
+}
+
+.idle-countdown {
+  margin: 0 0 12px;
+  font-size: 0.95rem;
+  text-align: center;
+  color: #cbd5e1;
+  min-height: 1.3em;
+}
+
+.idle-dialog-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.idle-dialog-actions button {
+  font-family: inherit;
+  font-size: 1rem;
+  padding: 12px;
+  border-radius: 999px;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.idle-yes {
+  background: rgba(34, 197, 94, 0.9);
+  color: #0f172a;
+}
+
+.idle-no {
+  background: rgba(255, 255, 255, 0.12);
+  color: #f1f5f9;
+}

@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="nl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Wat is de hyperloop? | EHC</title>
+    <link rel="stylesheet" href="./site.css" />
+    <link rel="stylesheet" href="./tracking.css" />
+    <link rel="stylesheet" href="./keyboard.css" />
+  </head>
+  <body class="page-hyperloop">
+    <div class="page-shell">
+      <div class="content-two-col">
+        <div class="content-text">
+          <h1>Wat is de hyperloop?</h1>
+          <p>
+            Stel je een capsule voor die op magneten zweeft, door een buis waar bijna geen lucht meer in zit. Zonder wielen, zonder geluidshinder, zonder uitlaatgassen. Op lange afstand gaat dat snel én zuinig.
+          </p>
+          <p>
+            Je vliegt niet door de lucht, je glijdt erdoorheen. Hier in Veendam staat de testbaan letterlijk om de hoek, vlak naast dit gebouw.
+          </p>
+          <h2>Hoe verhoudt het zich tot andere vervoersmiddelen?</h2>
+          <p>
+            Vergeleken met een vliegtuig of auto stoot de hyperloop per kilometer veel minder CO₂ uit, zeker op lange ritten. Waar de files op de weg groeien, kan dezelfde stroom mensen of vracht door één buis.
+          </p>
+          <p>
+            De trein blijft de basis voor het binnenlandse vervoer. De hyperloop is bedoeld als aanvulling op routes waar snelheid telt. Voor de buurt is het belangrijkste verschil dat je bijna geen spoor- of motorlawaai hoort.
+          </p>
+        </div>
+        <div class="content-media">
+          <div class="media-card">
+            <video controls playsinline preload="metadata" poster="./Links/IMG/hyperloop-hardt-hyperloop-2.jpeg">
+              <source src="./Links/Video/What_is_Hyperloop.mp4" type="video/mp4" />
+              Video ontbreekt of wordt niet ondersteund. Zet What_is_Hyperloop.mp4 in Links/Video/.
+            </video>
+          </div>
+        </div>
+      </div>
+
+      <section class="timeline-section" aria-label="Tijdlijn hyperloop">
+        <h2 class="visually-hidden">Tijdlijn</h2>
+        <div class="timeline-line" role="presentation">
+          <ul class="timeline-points" id="timelinePoints"></ul>
+        </div>
+      </section>
+
+      <footer class="page-footer-actions">
+        <a class="btn-primary" href="./je-stem.html">Jouw stem</a>
+        <p class="back-to-menu"><a class="back-link" href="./index.html">← Terug naar hoofdmenu</a></p>
+      </footer>
+    </div>
+    <div class="lang-flag" role="img" aria-label="Taal: Nederlands"></div>
+
+    <script>
+      const TIMELINE = [
+        {
+          year: 2012,
+          short: "Het idee gaat de wereld over",
+          text: "Elon Musk deelt het idee met de wereld: een capsule die door een buis schiet, in een tempo dat we daarvoor niet kenden. Aan testen in Veendam denkt op dat moment nog niemand.",
+        },
+        {
+          year: 2017,
+          short: "Europa pakt het serieus op",
+          text: "Universiteiten en bedrijven pakken het idee serieus op. Europa zet de eerste voorzichtige stappen richting eigen kennis over de hyperloop.",
+        },
+        {
+          year: 2019,
+          short: "Veendam wordt testlocatie",
+          text: "Veendam wordt aangewezen als officiële testplek voor het European Hyperloop Center. Daarmee krijgt de regio een hoofdrol in het Europese onderzoek naar nieuwe mobiliteit.",
+        },
+        {
+          year: 2020,
+          short: "HyperBRIDGE gaat van start",
+          text: "HyperBRIDGE begint: Nederland en Duitsland werken samen, met testlocaties in Veendam en het Duitse Emden. Twee landen die dezelfde vraag willen beantwoorden.",
+        },
+        {
+          year: 2024,
+          short: "De testbaan staat er",
+          text: "De testbaan in Veendam staat er. Van papier naar de praktijk: de eerste tests lopen. Ook buiten Nederland krijgt de regio een naam als plek voor innovatie.",
+        },
+        {
+          year: 2029,
+          short: "Het EHC is volledig in bedrijf",
+          text: "Het EHC moet rond dit jaar volledig in bedrijf zijn. Meer tests betekenen meer data. Daardoor ontstaat ook meer duidelijkheid over hoe het systeem zich in de echte wereld gedraagt.",
+        },
+        {
+          year: 2030,
+          short: "De eerste passagierstests komen in zicht",
+          text: "De eerste passagierstests komen in zicht: mensen die echt door de buis reizen, niet alleen capsules of vracht. Een bijzonder moment dat hier in de regio is begonnen.",
+        },
+        {
+          year: 2040,
+          short: "Opschalen naar een echte verbinding",
+          text: "Het plan is om door te groeien naar een volwaardige hogesnelheidsbaan. Wat in Veendam is bewezen, kan dan uitrollen naar een groter netwerk.",
+        },
+        {
+          year: 2050,
+          short: "Een Europees netwerk als einddoel",
+          text: "Het einddoel is een netwerk dat heel Europa stil en zuinig met elkaar verbindt, als alternatief voor veel korte vluchten binnen het continent.",
+        },
+      ];
+
+      const list = document.getElementById("timelinePoints");
+      let openId = null;
+
+      function closePopup() {
+        document.querySelectorAll(".timeline-popup").forEach((el) => el.remove());
+        document.querySelectorAll(".timeline-point-btn").forEach((b) => {
+          b.setAttribute("aria-pressed", "false");
+          b.setAttribute("aria-expanded", "false");
+        });
+        openId = null;
+      }
+
+      function renderPopup(item, li) {
+        closePopup();
+        const btn = li.querySelector(".timeline-point-btn");
+        const mount = li.querySelector(".timeline-popup-mount");
+        btn.setAttribute("aria-pressed", "true");
+        btn.setAttribute("aria-expanded", "true");
+        const pop = document.createElement("div");
+        pop.className = "timeline-popup";
+        pop.id = "timeline-popup-" + item.year;
+        pop.textContent = item.text;
+        mount.appendChild(pop);
+        openId = item.year;
+      }
+
+      document.addEventListener("click", (e) => {
+        if (openId === null) return;
+        if (e.target.closest(".timeline-point-btn")) return;
+        if (e.target.closest(".timeline-popup")) return;
+        closePopup();
+      });
+
+      TIMELINE.forEach((item) => {
+        const li = document.createElement("li");
+        const anchor = document.createElement("div");
+        anchor.className = "timeline-dot-anchor";
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "timeline-point-btn";
+        btn.setAttribute("aria-pressed", "false");
+        btn.setAttribute("aria-expanded", "false");
+        const mount = document.createElement("span");
+        mount.className = "timeline-popup-mount";
+        const dot = document.createElement("span");
+        dot.className = "timeline-dot";
+        dot.setAttribute("aria-hidden", "true");
+        mount.appendChild(dot);
+        const y = document.createElement("span");
+        y.className = "timeline-year";
+        y.textContent = String(item.year);
+        const s = document.createElement("span");
+        s.className = "timeline-label-short";
+        s.textContent = item.short;
+        btn.appendChild(mount);
+        btn.appendChild(y);
+        btn.appendChild(s);
+        anchor.appendChild(btn);
+        li.appendChild(anchor);
+        btn.addEventListener("click", (e) => {
+          /* Popup zit in dezelfde button; klik op popup mag niets doen (ook niet sluiten) */
+          if (e.target.closest(".timeline-popup")) return;
+          if (openId === item.year) {
+            closePopup();
+            return;
+          }
+          renderPopup(item, li);
+        });
+        list.appendChild(li);
+      });
+
+      const y2029 = TIMELINE.find((x) => x.year === 2029);
+      if (y2029) {
+        const li = [...list.children].find((_, i) => TIMELINE[i].year === 2029);
+        if (li) renderPopup(y2029, li);
+      }
+    </script>
+    <style>
+      .visually-hidden {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
+      }
+    </style>
+    <script src="./src/idle-timeout.js" defer></script>
+    <script src="./tracking.js" defer></script>
+    <script src="./src/touch-bridge.js" defer></script>
+    <script src="./src/keyboard.js" defer></script>
+  </body>
+</html>

@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="nl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Alfatest | European Hyperloop Center</title>
+    <link rel="stylesheet" href="./site.css" />
+    <link rel="stylesheet" href="./tracking.css" />
+    <link rel="stylesheet" href="./keyboard.css" />
+  </head>
+  <body class="alfatest-page">
+    <div class="page-shell">
+      <h1>Welkom bij de alfatest</h1>
+
+      <p class="alfatest-intro">
+        Je gaat een online prototype bekijken van een interactieve installatie.
+        Tijdens je bezoek krijg je <strong>zes korte taken</strong>. Elke
+        taak verschijnt automatisch in een balk bovenin het scherm. Zodra
+        je de taak hebt voltooid, vragen we kort hoe het ging en gaan we
+        automatisch door naar de volgende. Je kunt ook zelf op de balk
+        tikken om een taak handmatig af te ronden.
+      </p>
+
+      <p class="alfatest-intro">
+        Er is geen goed of fout. Doe alles in je eigen tempo en zoals jij
+        het zou doen als je hier zelf langskwam. We slaan alleen je kliks,
+        scores en antwoorden anoniem op, zodat we de installatie kunnen
+        verbeteren.
+      </p>
+
+      <ul class="alfatest-tasks" aria-label="Overzicht van de taken">
+        <li><span class="alfatest-task-nr">Taak 1.</span> Bekijk de uitleg over de hyperloop.</li>
+        <li><span class="alfatest-task-nr">Taak 2.</span> Plan een rit op de kaart en vergelijk de CO₂.</li>
+        <li><span class="alfatest-task-nr">Taak 3.</span> Lees de informatie over geluid.</li>
+        <li><span class="alfatest-task-nr">Taak 4.</span> Bekijk hoe de veiligheid is geregeld.</li>
+        <li><span class="alfatest-task-nr">Taak 5.</span> Lees wat het EHC voor de regio betekent.</li>
+        <li><span class="alfatest-task-nr">Taak 6.</span> Laat via <em>Jouw stem</em> een bericht achter.</li>
+      </ul>
+
+      <p class="alfatest-intro" style="opacity:0.8; font-size:13pt;">
+        Na de drie taken volgt een korte vragenlijst (ongeveer 8–10 minuten).
+        Klaar? Start hieronder.
+      </p>
+
+      <div class="alfatest-start-wrap">
+        <button type="button" id="alfatestStartBtn" class="btn-primary">
+          Start de alfatest
+        </button>
+      </div>
+    </div>
+    <div class="lang-flag" role="img" aria-label="Taal: Nederlands"></div>
+    <script src="./tracking.js"></script>
+    <script>
+      // Wacht tot tracking.js de state machine klaar heeft staan.
+      document.getElementById("alfatestStartBtn").addEventListener(
+        "click",
+        function () {
+          try {
+            if (window.EHCAlfa && typeof window.EHCAlfa.start === "function") {
+              window.EHCAlfa.start();
+            }
+          } catch (e) {}
+          // Welkomscherm slaan we over: bij de alfatest start de tester
+          // direct in het hoofdmenu, met de taakbanner zichtbaar.
+          location.href = "./index.html";
+        }
+      );
+    </script>
+    <script src="./src/touch-bridge.js" defer></script>
+    <script src="./src/keyboard.js" defer></script>
+  </body>
+</html>

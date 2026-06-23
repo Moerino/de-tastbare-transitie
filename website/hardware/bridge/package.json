@@ -1,0 +1,14 @@
+{
+  "name": "haptics-serial-bridge",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "WebSocket to serial bridge for Arduino haptics.",
+  "scripts": {
+    "start": "node serial-haptics-bridge.js --port /dev/tty.usbmodem1101 --baud 115200 --ws 8765"
+  },
+  "dependencies": {
+    "serialport": "latest",
+    "ws": "latest"
+  }
+}

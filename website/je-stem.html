@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="nl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Jouw stem | EHC</title>
+    <link rel="stylesheet" href="./site.css" />
+    <link rel="stylesheet" href="./tracking.css" />
+    <link rel="stylesheet" href="./keyboard.css" />
+  </head>
+  <body class="page-stem">
+    <div class="page-shell">
+      <h1>Heb je een vraag, idee of zorg?</h1>
+      <p style="text-align: center">Laat het hier achter. We lezen alles wat binnenkomt.</p>
+
+      <form class="stem-form" id="stemForm" action="#" method="post">
+        <div class="stem-filters" role="group" aria-label="Soort bericht">
+          <button type="button" class="stem-filter" data-type="vraag" aria-pressed="true">Vraag</button>
+          <button type="button" class="stem-filter" data-type="idee" aria-pressed="false">Idee</button>
+          <button type="button" class="stem-filter" data-type="zorg" aria-pressed="false">Zorg</button>
+        </div>
+        <input type="hidden" name="soort" id="stemSoort" value="vraag" />
+        <label for="stemBericht" class="visually-hidden">Uw bericht</label>
+        <textarea
+          id="stemBericht"
+          name="bericht"
+          class="stem-textarea"
+          rows="11"
+          required
+          placeholder="Typ hier je vraag. We proberen binnen twee weken een antwoord terug te geven."
+        ></textarea>
+      </form>
+
+      <p id="stemThanks" class="stem-thanks" role="status" tabindex="-1">Bedankt, we hebben je bericht ontvangen.</p>
+
+      <div class="stem-submit-wrap">
+        <button type="submit" form="stemForm" class="btn-primary">Jouw stem</button>
+      </div>
+
+      <footer class="page-footer-actions">
+        <p class="back-to-menu"><a class="back-link" href="./index.html">← Terug naar hoofdmenu</a></p>
+      </footer>
+    </div>
+    <div class="lang-flag" role="img" aria-label="Taal: Nederlands"></div>
+
+    <style>
+      .visually-hidden {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
+      }
+    </style>
+    <script>
+      const PLACEHOLDERS = {
+        vraag: "Typ hier je vraag. We proberen binnen twee weken een antwoord terug te geven.",
+        idee: "Typ hier je idee. Goede gedachten uit de buurt nemen we mee in onze plannen voor het EHC.",
+        zorg: "Typ hier je zorg. We nemen elk signaal serieus en koppelen kort terug wat ermee gebeurt.",
+      };
+
+      const form = document.getElementById("stemForm");
+      const textarea = document.getElementById("stemBericht");
+      const hidden = document.getElementById("stemSoort");
+      const thanks = document.getElementById("stemThanks");
+      let current = "vraag";
+
+      function setType(type) {
+        current = type;
+        hidden.value = type;
+        textarea.placeholder = PLACEHOLDERS[type];
+        document.querySelectorAll(".stem-filter").forEach((btn) => {
+          const on = btn.getAttribute("data-type") === type;
+          btn.setAttribute("aria-pressed", on ? "true" : "false");
+        });
+      }
+
+      document.querySelectorAll(".stem-filter").forEach((btn) => {
+        btn.addEventListener("click", () => setType(btn.getAttribute("data-type")));
+      });
+
+      form.addEventListener("submit", (e) => {
+        e.preventDefault();
+        thanks.classList.add("is-visible");
+        form.reset();
+        setType("vraag");
+        textarea.placeholder = PLACEHOLDERS.vraag;
+        thanks.focus();
+      });
+    </script>
+    <script src="./src/idle-timeout.js" defer></script>
+    <script src="./tracking.js" defer></script>
+    <script src="./src/touch-bridge.js" defer></script>
+    <script src="./src/keyboard.js" defer></script>
+  </body>
+</html>

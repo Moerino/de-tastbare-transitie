@@ -1,0 +1,343 @@
+<!doctype html>
+<html lang="nl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+    <title>Pinch-zoom diagnose — HyperBRIDGE</title>
+    <link rel="stylesheet" href="./site.css" />
+    <link rel="stylesheet" href="./tracking.css" />
+    <link rel="stylesheet" href="./keyboard.css" />
+    <style>
+      html, body {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        background: #2a0e04;
+        color: #fff7f5;
+        font-family: system-ui, -apple-system, sans-serif;
+        overflow: hidden;
+        /* Browser-gestures uit zodat onze synthetic pointers ongehinderd door komen. */
+        touch-action: none;
+        -webkit-user-select: none;
+        user-select: none;
+      }
+      .stage {
+        position: fixed;
+        inset: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        touch-action: none;
+      }
+      .target-square {
+        width: 220px;
+        height: 220px;
+        background: linear-gradient(135deg, #f6653a, #c83509);
+        border: 3px solid #fff7f5;
+        border-radius: 24px;
+        transform-origin: center;
+        transition: transform 0.04s linear;
+        box-shadow: 0 10px 40px rgba(247, 124, 88, 0.5);
+      }
+      .info {
+        position: fixed;
+        top: 24px;
+        left: 24px;
+        right: 24px;
+        font-size: 1.05rem;
+        line-height: 1.4;
+      }
+      .info h1 {
+        margin: 0 0 4px;
+        font-size: 1.3rem;
+      }
+      .stats {
+        position: fixed;
+        bottom: 24px;
+        left: 24px;
+        font-family: ui-monospace, SFMono-Regular, monospace;
+        font-size: 0.95rem;
+        background: rgba(0, 0, 0, 0.4);
+        padding: 12px 18px;
+        border-radius: 10px;
+        min-width: 280px;
+      }
+      .stats div { margin: 2px 0; }
+      .stats .label { opacity: 0.65; display: inline-block; min-width: 130px; }
+      .stats .value { color: #fdd9ce; }
+      .reset-btn {
+        position: fixed;
+        bottom: 24px;
+        right: 24px;
+        background: #f6653a;
+        color: #fff;
+        border: none;
+        border-radius: 999px;
+        padding: 14px 28px;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
+      }
+      .pointer-dot {
+        position: fixed;
+        width: 64px;
+        height: 64px;
+        margin-left: -32px;
+        margin-top: -32px;
+        border-radius: 50%;
+        background: radial-gradient(circle, rgba(247, 124, 88, 0.9) 0%, rgba(247, 124, 88, 0.25) 70%, transparent 100%);
+        border: 3px solid #fff;
+        box-shadow: 0 0 20px rgba(247, 124, 88, 0.8);
+        pointer-events: none;
+        z-index: 9000;
+        transition: opacity 200ms ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        color: #fff;
+        font-size: 0.85rem;
+        text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7);
+      }
+      .pinch-line {
+        position: fixed;
+        height: 3px;
+        background: linear-gradient(90deg, #f77c58, #fdd9ce, #f77c58);
+        transform-origin: left center;
+        pointer-events: none;
+        z-index: 8999;
+        border-radius: 2px;
+        box-shadow: 0 0 8px rgba(247, 124, 88, 0.6);
+      }
+      .back-link {
+        position: fixed;
+        top: 18px;
+        right: 24px;
+        color: #fff7f5;
+        text-decoration: none;
+        opacity: 0.8;
+      }
+      .back-link:hover { opacity: 1; }
+    </style>
+  </head>
+  <body>
+    <a class="back-link" href="./index.html">← Hoofdmenu</a>
+
+    <div class="info">
+      <h1>Pinch-zoom diagnose</h1>
+      <p>Tik met <strong>twee vingers</strong> tegelijk op het oranje vierkant. Schuif van elkaar = inzoomen, naar elkaar = uitzoomen.</p>
+    </div>
+
+    <div class="stage" id="stage">
+      <div class="target-square" id="square"></div>
+    </div>
+
+    <div class="stats">
+      <div><span class="label">Actieve pointers:</span> <span class="value" id="statCount">0</span></div>
+      <div><span class="label">Pointer IDs:</span> <span class="value" id="statIds">—</span></div>
+      <div><span class="label">Afstand (px):</span> <span class="value" id="statDist">—</span></div>
+      <div><span class="label">Zoom-factor:</span> <span class="value" id="statZoom">1.00×</span></div>
+      <div><span class="label">Vierkant grootte:</span> <span class="value" id="statSize">220 px</span></div>
+    </div>
+
+    <button class="reset-btn" id="resetBtn" type="button">↻ Reset</button>
+
+    <script src="./src/touch-bridge.js" defer></script>
+    <script>
+      (function () {
+        "use strict";
+        const square = document.getElementById("square");
+        const stage = document.getElementById("stage");
+        const statCount = document.getElementById("statCount");
+        const statIds = document.getElementById("statIds");
+        const statDist = document.getElementById("statDist");
+        const statZoom = document.getElementById("statZoom");
+        const statSize = document.getElementById("statSize");
+        const resetBtn = document.getElementById("resetBtn");
+
+        // Eigen registratie van actieve pointers. Onafhankelijk van touch-bridge
+        // zodat we ook handmatige test (muis met touch-mock) kunnen valideren.
+        const pointers = new Map();   // pointerId → {el, x, y, fallbackOrder}
+        let pinchStartDist = null;
+        let pinchBaseScale = 1.0;
+        let currentScale = 1.0;
+        let demoSeq = 0;               // fallback touch-volgorde (muis/mock)
+        let pairKey = null;            // "idA-idB" van het huidige pinch-paar
+
+        function ensureDot(pointerId) {
+          let dot = pointers.get(pointerId)?.el;
+          if (!dot) {
+            dot = document.createElement("div");
+            dot.className = "pointer-dot";
+            dot.textContent = pointerId;
+            document.body.appendChild(dot);
+          }
+          return dot;
+        }
+
+        // ——— Vinger-info uit touch-bridge ————————————————————————————————————
+        // window.touchBridgePointers is keyed op dezelfde pointerId die wij in de
+        // PointerEvents krijgen. Bevat {hand, finger, order}. Voor muis/mock
+        // (geen bridge) vallen we terug op een eigen volgnummer.
+        function metaFor(pointerId, fallbackOrder) {
+          const m = window.touchBridgePointers && window.touchBridgePointers.get(pointerId);
+          if (m) return { finger: m.finger, hand: m.hand, order: m.order };
+          return { finger: "?", hand: "?", order: fallbackOrder };
+        }
+
+        // Selectie = PURE touch-volgorde: de 2 vingers die als EERSTE het scherm
+        // raakten (laagste `order`), ongeacht welke vinger of hand. De iPhone
+        // side-cam bepaalt het aanraak-moment (DOWN-state), de DJI welke vinger.
+        // Bij twijfel (zelfde frame) wint de vinger die de tracker als eerste
+        // uitstuurt — dat is de duim (dict-volgorde thumb→index→…), precies wat
+        // gewenst is: "bij twijfel de duim pakken".
+        function selectPinchPair() {
+          const list = [];
+          for (const [pid, p] of pointers.entries()) {
+            const meta = metaFor(pid, p.fallbackOrder);
+            list.push({ pid, x: p.x, y: p.y, finger: meta.finger,
+                        hand: meta.hand, order: meta.order });
+          }
+          if (list.length < 2) return null;
+          // Laagste order = eerst aangeraakt.
+          list.sort((a, b) => a.order - b.order);
+          return [list[0], list[1]];
+        }
+
+        function highlightPair(pair) {
+          const selected = new Set(pair ? [pair[0].pid, pair[1].pid] : []);
+          for (const [pid, p] of pointers.entries()) {
+            if (!p.el) continue;
+            if (selected.has(pid)) {
+              p.el.style.borderColor = "#22c55e";
+              p.el.style.boxShadow = "0 0 16px rgba(34,197,94,0.9)";
+            } else {
+              p.el.style.borderColor = "";
+              p.el.style.boxShadow = "";
+            }
+          }
+        }
+
+        function updateLine(pair) {
+          let line = document.getElementById("pinchLine");
+          if (!pair) {
+            if (line) line.remove();
+            return null;
+          }
+          const a = pair[0], b = pair[1];
+          if (!line) {
+            line = document.createElement("div");
+            line.id = "pinchLine";
+            line.className = "pinch-line";
+            document.body.appendChild(line);
+          }
+          const dx = b.x - a.x;
+          const dy = b.y - a.y;
+          const dist = Math.hypot(dx, dy);
+          const angle = Math.atan2(dy, dx) * 180 / Math.PI;
+          line.style.left = a.x + "px";
+          line.style.top = a.y + "px";
+          line.style.width = dist + "px";
+          line.style.transform = `rotate(${angle}deg)`;
+          return dist;
+        }
+
+        // Herbereken het pinch-paar + scale. Resetten van de baseline als het
+        // gekozen paar wisselt (andere vingers) zodat de zoom niet verspringt.
+        function recompute() {
+          const pair = selectPinchPair();
+          highlightPair(pair);
+          const dist = updateLine(pair);
+          const newKey = pair ? [pair[0].pid, pair[1].pid].sort().join("-") : null;
+          if (newKey !== pairKey) {
+            // Paar gewisseld → herijk de baseline op de huidige afstand.
+            pairKey = newKey;
+            pinchStartDist = dist;
+            pinchBaseScale = currentScale;
+          }
+          if (pair && pinchStartDist && pinchStartDist > 0 && dist) {
+            currentScale = Math.max(0.2,
+              Math.min(5.0, pinchBaseScale * (dist / pinchStartDist)));
+            applyScale();
+          }
+          refreshStats(pair, dist);
+          return dist;
+        }
+
+        function refreshStats(pair, dist) {
+          statCount.textContent = pointers.size;
+          if (pair) {
+            statIds.textContent =
+              `${pair[0].hand}-${pair[0].finger} + ${pair[1].hand}-${pair[1].finger}`;
+          } else {
+            statIds.textContent = pointers.size
+              ? Array.from(pointers.keys()).join(", ")
+              : "—";
+          }
+          statDist.textContent = dist ? dist.toFixed(0) : "—";
+          statZoom.textContent = currentScale.toFixed(2) + "×";
+          const size = Math.round(220 * currentScale);
+          statSize.textContent = size + " px";
+        }
+
+        function applyScale() {
+          square.style.transform = `scale(${currentScale})`;
+        }
+
+        function onPointerDown(e) {
+          const dot = ensureDot(e.pointerId);
+          dot.style.transform = `translate(${e.clientX}px, ${e.clientY}px)`;
+          pointers.set(e.pointerId, {
+            el: dot, x: e.clientX, y: e.clientY, fallbackOrder: demoSeq++,
+          });
+          recompute();
+        }
+
+        function onPointerMove(e) {
+          const p = pointers.get(e.pointerId);
+          if (!p) return;
+          p.x = e.clientX;
+          p.y = e.clientY;
+          p.el.style.transform = `translate(${e.clientX}px, ${e.clientY}px)`;
+          recompute();
+        }
+
+        function onPointerUp(e) {
+          const p = pointers.get(e.pointerId);
+          if (p && p.el) p.el.remove();
+          pointers.delete(e.pointerId);
+          if (pointers.size < 2) {
+            pinchStartDist = null;
+            pinchBaseScale = currentScale;
+            pairKey = null;
+          }
+          recompute();
+        }
+
+        // Luister op beide muis EN touch via PointerEvents.
+        document.addEventListener("pointerdown", onPointerDown);
+        document.addEventListener("pointermove", onPointerMove);
+        document.addEventListener("pointerup", onPointerUp);
+        document.addEventListener("pointercancel", onPointerUp);
+
+        resetBtn.addEventListener("click", (ev) => {
+          ev.stopPropagation();
+          currentScale = 1.0;
+          pinchStartDist = null;
+          pinchBaseScale = 1.0;
+          applyScale();
+          // Wis evt. achtergebleven dots.
+          pointers.forEach((p) => p.el && p.el.remove());
+          pointers.clear();
+          const line = document.getElementById("pinchLine");
+          if (line) line.remove();
+          refreshStats(null);
+        });
+
+        refreshStats(null);
+      })();
+    </script>
+  </body>
+</html>

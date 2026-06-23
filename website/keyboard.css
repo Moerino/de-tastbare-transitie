@@ -1,0 +1,158 @@
+/* ============================================================================
+   Globaal on-screen toetsenbord — HyperBRIDGE design system
+   ============================================================================
+   Verschijnt onderaan het scherm zodra een <input> of <textarea> focus krijgt.
+   Verdwijnt als er buiten wordt geklikt of de verberg-toets wordt aangeraakt.
+
+   Kleurtokens uit het design system:
+     Primary 50  #fff7f5   — toets-achtergrond (inactief)
+     Primary 100 #fdd9ce   — hover/active wash
+     Primary 200 #fbbaa6   — toets-rand
+     Primary 400 #f77c58   — focus-glow + ghost-cursor (touch-bridge)
+     Primary 500 #f6653a   — toets actief / pressed
+     Primary 700 #c83509   — pressed-rand
+     Primary 900 #491303   — toets-tekst, paneel-achtergrond
+============================================================================ */
+
+.osk-panel {
+  position: fixed;
+  left: 50%;
+  bottom: 0;
+  transform: translate(-50%, 100%);
+  width: min(960px, 96vw);
+  max-width: 100vw;
+  padding: 16px 18px 22px;
+  background: rgba(73, 19, 3, 0.94); /* Primary 900 met blur-laag */
+  border-top-left-radius: 22px;
+  border-top-right-radius: 22px;
+  border: 1px solid rgba(247, 124, 88, 0.35); /* Primary 400 subtle edge */
+  box-shadow: 0 -12px 40px rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  z-index: 9000;
+  transition: transform 0.28s ease-out;
+  user-select: none;
+  -webkit-user-select: none;
+  /* Voorkomt dat de toetsen focus stelen van de input. */
+  pointer-events: auto;
+}
+
+.osk-panel.is-open {
+  transform: translate(-50%, 0);
+}
+
+.osk-row {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 6px;
+}
+
+.osk-row:first-child {
+  margin-top: 0;
+}
+
+.osk-key {
+  flex: 0 0 auto;
+  min-width: 56px;
+  min-height: 56px;
+  padding: 0 10px;
+  background: #fff7f5; /* Primary 50 */
+  color: #491303; /* Primary 900 */
+  border: 1.5px solid #fbbaa6; /* Primary 200 */
+  border-radius: 12px;
+  font-family: inherit;
+  font-size: 1.15rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.08s ease, color 0.08s ease,
+    border-color 0.08s ease, transform 0.08s ease;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.18);
+}
+
+.osk-key:hover,
+.osk-key:focus-visible {
+  background: #fdd9ce; /* Primary 100 */
+  border-color: #f99b7f; /* Primary 300 */
+  outline: none;
+}
+
+/* .is-pressed is een korte visuele bevestiging die de JS toevoegt na een tap;
+   gebruikt om touch-feedback te geven, ook al heb je geen :active doordat
+   PointerEvent-dispatch het niet altijd zet. */
+.osk-key:active,
+.osk-key.is-pressed {
+  background: #f6653a; /* Primary 500 */
+  border-color: #c83509; /* Primary 700 */
+  color: #ffffff;
+  transform: translateY(1px);
+}
+
+/* Speciale toetsen iets breder/herkenbaarder maken. */
+.osk-key--wide {
+  min-width: 88px;
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+.osk-key--space {
+  flex: 1 1 320px;
+  max-width: 480px;
+  min-width: 220px;
+}
+
+.osk-key--hide {
+  background: transparent;
+  color: #fff7f5;
+  border-color: rgba(255, 247, 245, 0.4);
+}
+
+.osk-key--hide:hover,
+.osk-key--hide:focus-visible {
+  background: rgba(255, 247, 245, 0.12);
+  color: #ffffff;
+  border-color: #f77c58;
+}
+
+/* Backdrop dat onder het toetsenbord ligt: wanneer aangeraakt sluit het paneel.
+   Volledig transparant zodat de pagina zichtbaar blijft. */
+.osk-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 8990;
+  background: transparent;
+  display: none;
+}
+
+.osk-panel.is-open ~ .osk-backdrop,
+.osk-backdrop.is-open {
+  display: block;
+}
+
+/* ——— Specifieke containers die boven het toetsenbord moeten blijven ———————
+   .route-overlay heeft `transform: translateX(-50%)` voor centrering. We
+   kunnen die niet via JS overschrijven zonder de X-centrering te breken.
+   Daarom: dedicated CSS-shift die beide translates combineert. JS herkent
+   deze containers (zie `OSK_CSS_HANDLED` in keyboard.js) en slaat ze over. */
+
+body.osk-open .route-overlay {
+  transform: translate(-50%, -360px) !important;
+  transition: transform 0.28s ease-out;
+  z-index: 9100; /* boven het osk-panel zelf */
+}
+
+/* Op kleinere kiosk-resoluties iets compacter zodat alles binnen 1024px past. */
+@media (max-width: 1100px) {
+  .osk-key {
+    min-width: 48px;
+    min-height: 48px;
+    font-size: 1rem;
+  }
+  .osk-key--wide {
+    min-width: 72px;
+    font-size: 0.85rem;
+  }
+}

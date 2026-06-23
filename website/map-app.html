@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="nl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kaart | European Hyperloop Center</title>
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+      crossorigin=""
+    />
+    <link rel="stylesheet" href="./styles.css" />
+    <link rel="stylesheet" href="./tracking.css" />
+    <link rel="stylesheet" href="./keyboard.css" />
+    <style>
+      /* Brand-skin op OSM-tegels: tint richting Primary 900 (#491303) uit het
+         HyperBRIDGE design system. Scoped op .page-map-app zodat alleen deze
+         pagina getint wordt, en alleen .leaflet-tile zodat markers/lijnen/
+         tooltips hun eigen kleur houden. */
+      .page-map-app .leaflet-tile {
+        filter: invert(0.92) hue-rotate(180deg) sepia(0.55) saturate(1.35)
+          hue-rotate(-18deg) brightness(0.86) contrast(0.95);
+      }
+    </style>
+  </head>
+  <body class="page-map-app">
+    <script>
+      (function () {
+        const p = new URLSearchParams(location.search);
+        if (p.get("embed") === "preview") document.body.classList.add("map-embed-preview");
+      })();
+    </script>
+    <a class="map-back-link" href="./index.html">← Terug naar hoofdmenu</a>
+    <div id="app" class="app">
+      <div id="map" class="map"></div>
+
+      <img class="brand-logo" src="./Links/IMG/hyperbridge_logo.svg" alt="Hyperbridge logo" />
+
+      <div class="top-actions">
+        <button id="calibrationBtn" class="btn secondary">Kalibratie</button>
+        <button id="toggleHapticsBtn" class="btn secondary">Haptics: Aan</button>
+      </div>
+
+      <aside class="overlay compare-overlay">
+        <section class="card compare-card">
+          <h2>Vergelijking</h2>
+          <div id="comparisonGrid" class="comparison-grid"></div>
+        </section>
+      </aside>
+
+      <section class="overlay route-overlay card">
+        <h2>Route plannen</h2>
+        <div class="route-legend" aria-label="Route legenda">
+          <span class="legend-item"><span class="legend-line legend-line-gasoline"></span>Benzine auto</span>
+          <span class="legend-item"><span class="legend-line legend-line-plane"></span>Vliegtuig</span>
+          <span class="legend-item"><span class="legend-line legend-line-train"></span>Trein</span>
+          <span class="legend-item"><span class="legend-line legend-line-hyperloop"></span>Hyperloop corridor</span>
+        </div>
+        <label for="startInput">Startlocatie</label>
+        <div class="suggest-wrap">
+          <input id="startInput" type="text" placeholder="Bijv. Veendam" autocomplete="off" />
+          <ul id="startSuggestions" class="suggest-list" role="listbox" hidden></ul>
+        </div>
+        <label for="endInput">Eindlocatie</label>
+        <div class="suggest-wrap">
+          <input id="endInput" type="text" placeholder="Bijv. Groningen" autocomplete="off" />
+          <ul id="endSuggestions" class="suggest-list" role="listbox" hidden></ul>
+        </div>
+        <div class="row">
+          <button id="planRouteBtn" class="btn primary">Plan Route</button>
+          <button id="swapBtn" class="btn secondary">Wissel</button>
+        </div>
+      </section>
+
+      <section class="overlay criteria-overlay">
+        <div id="criteriaChips" class="chips"></div>
+      </section>
+
+      <section class="overlay map-controls">
+        <button id="zoomInBtn" class="btn secondary">+</button>
+        <button id="zoomOutBtn" class="btn secondary">-</button>
+        <button id="resetMapBtn" class="btn secondary">Reset</button>
+      </section>
+
+      <div class="hidden-support">
+        <dl id="routeSummary" class="summary"></dl>
+        <ul id="historyList" class="history-list"></ul>
+      </div>
+
+      <div id="trackingBanner" class="tracking-banner hidden">
+        We zijn je even kwijt. Ga terug naar de kalibratie om verder te gaan.
+      </div>
+    </div>
+
+    <dialog id="calibrationDialog" class="dialog">
+      <h3>Kalibratie wizard</h3>
+      <p id="calibrationStepText">
+        Wijs nu naar de linker bovenhoek en houd 700 ms vast.
+      </p>
+      <div class="calibration-progress">
+        <div id="calibrationProgressBar" class="bar"></div>
+      </div>
+      <div class="row">
+        <button id="calibrationNextBtn" class="btn primary">Volgende hoek</button>
+        <button id="calibrationCancelBtn" class="btn secondary">Sluiten</button>
+      </div>
+    </dialog>
+
+    <script
+      src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+      integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+      crossorigin=""
+    ></script>
+    <script type="module" src="./src/app.js"></script>
+    <script src="./src/idle-timeout.js" defer></script>
+    <script src="./tracking.js" defer></script>
+    <script src="./src/touch-bridge.js" defer></script>
+    <script src="./src/keyboard.js" defer></script>
+  </body>
+</html>

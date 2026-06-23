@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="nl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Wat betekent dit voor de regio? | EHC</title>
+    <link rel="stylesheet" href="./site.css" />
+    <link rel="stylesheet" href="./tracking.css" />
+    <link rel="stylesheet" href="./keyboard.css" />
+  </head>
+  <body>
+    <div class="page-shell">
+      <div class="content-two-col">
+        <div class="content-text">
+          <h1>Wat betekent het voor de regio?</h1>
+          <p>
+            Veendam is uitgekozen als testlocatie voor het European Hyperloop Center. Dat brengt internationale aandacht naar de regio. Ook ontstaan er nieuwe leer- en werkplekken voor jongeren die anders misschien zouden vertrekken.
+          </p>
+          <p>
+            Een groot project betekent tijdelijk ook meer bouw en verkeer in de buurt. We plannen dat zorgvuldig in overleg met de gemeente en omwonenden, zodat je op tijd weet wat er staat te gebeuren.
+          </p>
+        </div>
+        <div class="content-media">
+          <div class="media-card">
+            <video controls playsinline>
+              <source src="./Links/Video/Eerste_testrit_met_hyperloop.mp4" type="video/mp4" />
+              Geen video-ondersteuning. Zet Eerste_testrit_met_hyperloop.mp4 in Links/Video/.
+            </video>
+          </div>
+        </div>
+      </div>
+
+      <div class="charts-row charts-row--spaced" aria-label="Grafieken regio">
+        <div class="chart-box" id="chartEmployment">
+          <h4>Werk in de regio <span class="chart-badge chart-badge--data">CBS 2021–2023</span></h4>
+          <p class="chart-caption">
+            Het aantal arbeidsjaren in Noord-Nederland groeide in 2021-2022 met ruim 3% per jaar, en koelde af tot +1,6% in 2023 (CBS, 2020 = 100). Het EHC trekt nieuwe banen aan in techniek, bouw en logistiek, een sector die in Noord-Nederland traditioneel ondervertegenwoordigd is.
+          </p>
+          <div class="chart-bars" data-chart="employment" role="img" aria-label="Staafgrafiek werkgelegenheid Noord-Nederland 2021 tot 2023"></div>
+        </div>
+        <div class="chart-box" id="chartCo2">
+          <h4>Minder vrachtwagens door hyperloop <span class="chart-badge chart-badge--forecast">Voorspelling 2030–2050</span></h4>
+          <p class="chart-caption">
+            Hardt Hyperloop projecteert dat de A4-corridor (Amsterdam-Rotterdam) in 2030 dagelijks ruim 1.100 vrachtwagens overneemt. Bij volledige uitrol van het Nederlandse hyperloop-netwerk in 2050 zijn dat 2.500 vrachtwagens per dag minder op de weg. Hyperloop-transport stoot zelf geen directe CO₂ uit.
+          </p>
+          <div class="chart-bars" data-chart="co2" role="img" aria-label="Vrachtwagens per dag van de weg door hyperloop A4-corridor"></div>
+          <p class="chart-axis-note">Y-as: vrachtwagens per dag minder op de weg · Bron: Hardt Hyperloop / EIT InnoEnergy 2021</p>
+        </div>
+        <div class="chart-box" id="chartN33">
+          <h4>Vrachtverkeer op de N33 <span class="chart-badge chart-badge--forecast">Scenario 2030–2050</span></h4>
+          <p class="chart-caption">
+            De N33 is de hoofdroute naar Eemshaven. Door uitbreiding van de haven stijgt de drukte richting 2030 met ongeveer 20% (CBS/NDW). De eerste hyperloop-corridor opent in 2030 op de A4. Eemshaven volgt pas later. Bij een hyperloop-aansluiting voor Noord-Nederland na 2040 zou het N33-vrachtverkeer geleidelijk afnemen, in 2050 weer onder het 2030-piekniveau.
+          </p>
+          <div class="chart-bars" data-chart="n33" role="img" aria-label="Staafgrafiek vrachtdruk N33 met hyperloop-fasering"></div>
+          <p class="chart-disclaimer">De hyperloop-aansluiting voor Noord-Nederland is geen aangekondigd plan; de cijfers vanaf 2040 zijn een scenario-extrapolatie van de Hardt-studie naar de Eemshaven-corridor.</p>
+        </div>
+      </div>
+
+      <aside class="region-conclusion" aria-label="Samenvatting regio-impact">
+        <h3>Kort samengevat</h3>
+        <ul>
+          <li><strong>Meer werkgelegenheid</strong> voor jongeren in techniek, bouw en logistiek — sectoren die hier ondervertegenwoordigd zijn.</li>
+          <li><strong>Minder vrachtverkeer</strong> op de weg: bij volledige uitrol in 2050 zo'n 2.500 vrachtwagens per dag minder op de A4.</li>
+          <li><strong>Internationale aandacht</strong> voor de regio Veendam als testlocatie van het European Hyperloop Center.</li>
+        </ul>
+        <p class="region-conclusion-note">De cijfers vanaf 2030 zijn voorspellingen, gebaseerd op studies van Hardt Hyperloop, EIT InnoEnergy en CBS/NDW. De werkgelegenheidsgrafiek toont de meest recente gepubliceerde data van CBS (t/m 2023).</p>
+      </aside>
+
+      <footer class="page-footer-actions">
+        <a class="btn-primary" href="./je-stem.html">Jouw stem</a>
+        <p class="back-to-menu"><a class="back-link" href="./index.html">← Terug naar hoofdmenu</a></p>
+      </footer>
+    </div>
+    <div class="lang-flag" role="img" aria-label="Taal: Nederlands"></div>
+    <script>
+      (function () {
+        const fmt = (n) => String(n).replace(".", ",");
+
+        const CHARTS = {
+          // Arbeidsjaren Noord-Nederland (Groningen, Drenthe, Friesland),
+          // index 2020 = 100. Berekend uit CBS-groeicijfers per provincie:
+          //   2021: +2,8% (gem.)   -> 102,8
+          //   2022: +3,2% (gem.)   -> 106,1
+          //   2023: +1,6% (gem.)   -> 107,8
+          // Bron: CBS, De regionale economie 2023/2024.
+          // 2024 nog niet gepubliceerd door CBS, dus weggelaten.
+          employment: {
+            years: ["2021", "2022", "2023"],
+            values: [102.8, 106.1, 107.8],
+            // Y-as venster 100-110, height = (value-100)/10 * 100
+            heights: [28, 61, 78],
+          },
+          // Hardt Hyperloop / EIT InnoEnergy 2021: A4-corridor Amsterdam-Rotterdam.
+          // 2030: 1.100 vrachtwagens per dag minder op de A4 (start commerciële operatie).
+          // 2040: ~1.800 vrachtwagens per dag (lineair geïnterpoleerd tussen 2030 en 2050).
+          // 2050: 2.500 vrachtwagens per dag (volledig Nederlands netwerk).
+          // Bron: hardt.global / innoenergy.com.
+          co2: {
+            years: ["2030", "2040", "2050"],
+            values: [1100, 1800, 2500],
+            // Y-as venster 0-3000 vrachtwagens, schaal hieronder.
+            heights: [37, 60, 83],
+          },
+          // N33-vrachtverkeer, index 2022 = 100.
+          // 2022: 100 (baseline, ~1.000 vrachtwagens/dag op basis van CBS/NDW
+          //   meetpunten 2014-2017, geëxtrapoleerd met 3,7%/jr groei).
+          // 2030: 120 : havenuitbreiding Eemshaven trekt extra vracht aan tot ~2030;
+          //   A4-hyperloop opent dit jaar maar raakt N33 nog niet.
+          // 2040: 115 : bij een hyperloop-aansluiting voor Noord-Nederland is
+          //   het eerste effect zichtbaar; schaling Hardt-projectie naar overslag-
+          //   verhouding (Eemshaven 8,4 Mton vs Rotterdam 436 Mton = 1,9%)
+          //   geeft ~60 vrachtwagens/dag minder = ~5% reductie t.o.v. piek.
+          // 2050: 108 : volledige hyperloop-aansluiting; ~130 vrachtwagens/dag
+          //   minder = ~10% reductie t.o.v. piek, weer onder 2030-niveau.
+          n33: {
+            years: ["2022", "2030", "2040", "2050"],
+            values: [100, 120, 115, 108],
+            // Y-as venster 95-125 zodat verschillen zichtbaar zijn
+            heights: [17, 83, 67, 43],
+          },
+        };
+
+        function renderSimpleBars(container, spec) {
+          container.innerHTML = "";
+          spec.years.forEach((y, i) => {
+            const wrap = document.createElement("div");
+            wrap.className = "chart-bar-wrap";
+            const bar = document.createElement("span");
+            bar.className = "chart-bar-fill";
+            bar.style.height = spec.heights[i] + "%";
+            const value = document.createElement("span");
+            value.className = "chart-bar-value";
+            value.textContent = fmt(spec.values[i]);
+            bar.appendChild(value);
+            const lab = document.createElement("span");
+            lab.className = "chart-bar-label";
+            lab.textContent = y;
+            wrap.appendChild(bar);
+            wrap.appendChild(lab);
+            container.appendChild(wrap);
+          });
+        }
+
+        function renderDualBars(container, spec) {
+          container.innerHTML = "";
+          spec.years.forEach((y, i) => {
+            const wrap = document.createElement("div");
+            wrap.className = "chart-bar-wrap chart-bar-wrap--dual";
+            const pair = document.createElement("div");
+            pair.className = "chart-dual-pair";
+
+            const b1 = document.createElement("span");
+            b1.className = "chart-bar-baseline";
+            b1.style.height = spec.baselineHeights[i] + "%";
+            const v1 = document.createElement("span");
+            v1.className = "chart-bar-value";
+            v1.textContent = fmt(spec.baseline[i]);
+            b1.appendChild(v1);
+
+            const b2 = document.createElement("span");
+            b2.className = "chart-bar-scenario";
+            b2.style.height = spec.scenarioHeights[i] + "%";
+            const v2 = document.createElement("span");
+            v2.className = "chart-bar-value";
+            v2.textContent = fmt(spec.scenario[i]);
+            b2.appendChild(v2);
+
+            pair.appendChild(b1);
+            pair.appendChild(b2);
+            const lab = document.createElement("span");
+            lab.className = "chart-bar-label";
+            lab.textContent = y;
+            wrap.appendChild(pair);
+            wrap.appendChild(lab);
+            container.appendChild(wrap);
+          });
+        }
+
+        document.querySelectorAll("[data-chart]").forEach((el) => {
+          const key = el.getAttribute("data-chart");
+          const spec = CHARTS[key];
+          if (!spec) return;
+          renderSimpleBars(el, spec);
+        });
+      })();
+    </script>
+    <script src="./src/idle-timeout.js" defer></script>
+    <script src="./tracking.js" defer></script>
+    <script src="./src/touch-bridge.js" defer></script>
+    <script src="./src/keyboard.js" defer></script>
+  </body>
+</html>

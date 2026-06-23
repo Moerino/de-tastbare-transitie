@@ -1,0 +1,380 @@
+<!doctype html>
+<html lang="nl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Post-sessie vragenlijst | Alfatest EHC</title>
+    <link rel="stylesheet" href="./site.css" />
+    <link rel="stylesheet" href="./tracking.css" />
+    <link rel="stylesheet" href="./keyboard.css" />
+  </head>
+  <body class="vragenlijst-page">
+    <div class="page-shell">
+      <h1>Korte vragenlijst</h1>
+      <p class="vragenlijst-intro">
+        Bedankt voor het doorlopen van de installatie. Hieronder volgen
+        19 korte vragen over je ervaring. Vul in wat voor jou klopt: er
+        zijn geen foute antwoorden. Het invullen duurt ongeveer 8 tot 10
+        minuten.
+      </p>
+
+      <form id="vlForm" class="vl-form" autocomplete="off">
+        <!-- ====== Sectie 1: Taak-reflectie ====== -->
+        <section class="vl-section">
+          <p class="vl-section-label">Sectie 1: Taak-reflectie</p>
+
+          <div class="vl-question" data-qid="Q1" data-type="choice">
+            <p class="vl-question-num">Q1: Taak 1 (CO₂/kaart)</p>
+            <p class="vl-question-text">Kon je de kaartfunctie vinden zonder hulp?</p>
+            <div class="vl-choices">
+              <label class="vl-choice"><input type="radio" name="Q1" value="Ja"><span>Ja</span></label>
+              <label class="vl-choice"><input type="radio" name="Q1" value="Bijna"><span>Bijna</span></label>
+              <label class="vl-choice"><input type="radio" name="Q1" value="Nee"><span>Nee</span></label>
+            </div>
+          </div>
+
+          <div class="vl-question" data-qid="Q2" data-type="open">
+            <p class="vl-question-num">Q2: Taak 1 (CO₂/kaart)</p>
+            <p class="vl-question-text">Wat vond je (on)duidelijk aan de kaartpagina? <span style="opacity:0.6; font-size:11pt;">(optioneel)</span></p>
+            <textarea class="vl-textarea" name="Q2" rows="3"></textarea>
+          </div>
+
+          <div class="vl-question" data-qid="Q3" data-type="choice">
+            <p class="vl-question-num">Q3: Taak 1 (CO₂/kaart)</p>
+            <p class="vl-question-text">Begreep je het verschil in CO₂-uitstoot tussen de vervoersmiddelen?</p>
+            <div class="vl-choices">
+              <label class="vl-choice"><input type="radio" name="Q3" value="Ja"><span>Ja</span></label>
+              <label class="vl-choice"><input type="radio" name="Q3" value="Gedeeltelijk"><span>Gedeeltelijk</span></label>
+              <label class="vl-choice"><input type="radio" name="Q3" value="Nee"><span>Nee</span></label>
+            </div>
+          </div>
+
+          <div class="vl-question" data-qid="Q4" data-type="choice">
+            <p class="vl-question-num">Q4: Taak 2 (geluid)</p>
+            <p class="vl-question-text">Begreep je na het lezen wat het geluidsverschil is tussen de hyperloop en een trein?</p>
+            <div class="vl-choices">
+              <label class="vl-choice"><input type="radio" name="Q4" value="Ja"><span>Ja</span></label>
+              <label class="vl-choice"><input type="radio" name="Q4" value="Gedeeltelijk"><span>Gedeeltelijk</span></label>
+              <label class="vl-choice"><input type="radio" name="Q4" value="Nee"><span>Nee</span></label>
+            </div>
+          </div>
+
+          <div class="vl-question" data-qid="Q5" data-type="open">
+            <p class="vl-question-num">Q5: Taak 2 (geluid)</p>
+            <p class="vl-question-text">
+              Hoe zou jij dit geluidsverschil uitleggen aan een buur?
+              <button type="button" class="vl-info-btn" aria-label="Uitleg over decibel" data-info="db">i</button>
+            </p>
+            <div class="vl-info-panel" data-info-target="db" hidden>
+              <strong>Wat is een decibel (dB)?</strong>
+              <p>
+                Een decibel meet hoe luid een geluid is. De schaal is niet
+                lineair: <strong>+10 dB klinkt ongeveer 2 keer zo hard</strong>.
+                Een fluisterend gesprek is ongeveer 30 dB, een normaal gesprek
+                60 dB, een rijdende trein op een paar meter afstand zit rond
+                de 90 dB.
+              </p>
+            </div>
+            <textarea class="vl-textarea" name="Q5" rows="3"></textarea>
+          </div>
+
+          <div class="vl-question" data-qid="Q6" data-type="open">
+            <p class="vl-question-num">Q6: Taak 2 (geluid)</p>
+            <p class="vl-question-text">Miste je informatie over geluid die je had verwacht te zien? <span style="opacity:0.6; font-size:11pt;">(optioneel)</span></p>
+            <textarea class="vl-textarea" name="Q6" rows="3"></textarea>
+          </div>
+
+          <div class="vl-question" data-qid="Q7" data-type="choice">
+            <p class="vl-question-num">Q7: Taak 3 (feedbackmodule)</p>
+            <p class="vl-question-text">Heb je daadwerkelijk iets ingevuld bij 'Jouw stem'?</p>
+            <div class="vl-choices">
+              <label class="vl-choice"><input type="radio" name="Q7" value="Ja"><span>Ja</span></label>
+              <label class="vl-choice"><input type="radio" name="Q7" value="Nee"><span>Nee</span></label>
+            </div>
+          </div>
+
+          <div class="vl-question" data-qid="Q8" data-type="open" data-conditional="Q7=Nee">
+            <p class="vl-question-num">Q8: Alleen invullen bij 'Nee' op Q7</p>
+            <p class="vl-question-text">Wat hield je tegen om iets in te vullen?</p>
+            <textarea class="vl-textarea" name="Q8" rows="3"></textarea>
+          </div>
+
+          <div class="vl-question" data-qid="Q9" data-type="choice">
+            <p class="vl-question-num">Q9: Taak 3 (feedbackmodule)</p>
+            <p class="vl-question-text">Geloof je dat je bericht ook echt gelezen wordt door het EHC?</p>
+            <div class="vl-choices">
+              <label class="vl-choice"><input type="radio" name="Q9" value="Ja"><span>Ja</span></label>
+              <label class="vl-choice"><input type="radio" name="Q9" value="Twijfel"><span>Twijfel</span></label>
+              <label class="vl-choice"><input type="radio" name="Q9" value="Nee"><span>Nee</span></label>
+            </div>
+          </div>
+        </section>
+
+        <!-- ====== Sectie 2: Algemene ervaring ====== -->
+        <section class="vl-section">
+          <p class="vl-section-label">Sectie 2: Algemene ervaring</p>
+
+          <div class="vl-question" data-qid="Q10" data-type="likert">
+            <p class="vl-question-num">Q10</p>
+            <p class="vl-question-text">Hoe makkelijk was de installatie te gebruiken?</p>
+            <div class="vl-choices">
+              <label class="vl-choice"><input type="radio" name="Q10" value="1"><span>1: Heel moeilijk</span></label>
+              <label class="vl-choice"><input type="radio" name="Q10" value="2"><span>2</span></label>
+              <label class="vl-choice"><input type="radio" name="Q10" value="3"><span>3</span></label>
+              <label class="vl-choice"><input type="radio" name="Q10" value="4"><span>4</span></label>
+              <label class="vl-choice"><input type="radio" name="Q10" value="5"><span>5: Heel makkelijk</span></label>
+            </div>
+          </div>
+
+          <div class="vl-question" data-qid="Q11" data-type="open">
+            <p class="vl-question-num">Q11</p>
+            <p class="vl-question-text">Was er een onderdeel waar je niet uitkwam? <span style="opacity:0.6; font-size:11pt;">(optioneel)</span></p>
+            <textarea class="vl-textarea" name="Q11" rows="3"></textarea>
+          </div>
+
+          <div class="vl-question" data-qid="Q12" data-type="open">
+            <p class="vl-question-num">Q12</p>
+            <p class="vl-question-text">Welk onderdeel vond je het meest interessant?</p>
+            <textarea class="vl-textarea" name="Q12" rows="3"></textarea>
+          </div>
+
+          <div class="vl-question" data-qid="Q13" data-type="open">
+            <p class="vl-question-num">Q13</p>
+            <p class="vl-question-text">Welk onderdeel vond je het minst interessant of nuttig?</p>
+            <textarea class="vl-textarea" name="Q13" rows="3"></textarea>
+          </div>
+        </section>
+
+        <!-- ====== Sectie 3: Vertrouwen & beleving (Likert) ====== -->
+        <section class="vl-section">
+          <p class="vl-section-label">Sectie 3: Vertrouwen & beleving</p>
+
+          <div class="vl-question" data-qid="Q14" data-type="likert">
+            <p class="vl-question-num">Q14: Likert</p>
+            <p class="vl-question-text">"Na gebruik van de installatie voel ik mij goed geïnformeerd over de hyperloop."</p>
+            <div class="vl-choices">
+              <label class="vl-choice"><input type="radio" name="Q14" value="1"><span>1: Oneens</span></label>
+              <label class="vl-choice"><input type="radio" name="Q14" value="2"><span>2</span></label>
+              <label class="vl-choice"><input type="radio" name="Q14" value="3"><span>3</span></label>
+              <label class="vl-choice"><input type="radio" name="Q14" value="4"><span>4</span></label>
+              <label class="vl-choice"><input type="radio" name="Q14" value="5"><span>5: Eens</span></label>
+            </div>
+          </div>
+
+          <div class="vl-question" data-qid="Q15" data-type="likert">
+            <p class="vl-question-num">Q15: Likert</p>
+            <p class="vl-question-text">"Ik heb het gevoel dat ik via deze installatie mijn mening kwijt kan."</p>
+            <div class="vl-choices">
+              <label class="vl-choice"><input type="radio" name="Q15" value="1"><span>1: Oneens</span></label>
+              <label class="vl-choice"><input type="radio" name="Q15" value="2"><span>2</span></label>
+              <label class="vl-choice"><input type="radio" name="Q15" value="3"><span>3</span></label>
+              <label class="vl-choice"><input type="radio" name="Q15" value="4"><span>4</span></label>
+              <label class="vl-choice"><input type="radio" name="Q15" value="5"><span>5: Eens</span></label>
+            </div>
+          </div>
+
+          <div class="vl-question" data-qid="Q16" data-type="likert">
+            <p class="vl-question-num">Q16: Likert</p>
+            <p class="vl-question-text">"Ik vertrouw de informatie die de installatie mij geeft."</p>
+            <div class="vl-choices">
+              <label class="vl-choice"><input type="radio" name="Q16" value="1"><span>1: Oneens</span></label>
+              <label class="vl-choice"><input type="radio" name="Q16" value="2"><span>2</span></label>
+              <label class="vl-choice"><input type="radio" name="Q16" value="3"><span>3</span></label>
+              <label class="vl-choice"><input type="radio" name="Q16" value="4"><span>4</span></label>
+              <label class="vl-choice"><input type="radio" name="Q16" value="5"><span>5: Eens</span></label>
+            </div>
+          </div>
+
+          <div class="vl-question" data-qid="Q17" data-type="choice">
+            <p class="vl-question-num">Q17</p>
+            <p class="vl-question-text">Voelde de informatie eerlijk aan, of meer als reclame voor de hyperloop?</p>
+            <div class="vl-choices">
+              <label class="vl-choice"><input type="radio" name="Q17" value="Eerlijk"><span>Eerlijk</span></label>
+              <label class="vl-choice"><input type="radio" name="Q17" value="Beetje reclame"><span>Beetje reclame</span></label>
+              <label class="vl-choice"><input type="radio" name="Q17" value="Reclame"><span>Reclame</span></label>
+            </div>
+          </div>
+        </section>
+
+        <!-- ====== Sectie 4: Iteratie-input ====== -->
+        <section class="vl-section">
+          <p class="vl-section-label">Sectie 4: Iteratie-input</p>
+
+          <div class="vl-question" data-qid="Q18" data-type="open">
+            <p class="vl-question-num">Q18</p>
+            <p class="vl-question-text">Als je één ding mocht veranderen aan de installatie, wat zou dat zijn?</p>
+            <textarea class="vl-textarea" name="Q18" rows="3"></textarea>
+          </div>
+
+          <div class="vl-question" data-qid="Q19" data-type="open">
+            <p class="vl-question-num">Q19</p>
+            <p class="vl-question-text">Was er informatie die je miste en had verwacht te zien? <span style="opacity:0.6; font-size:11pt;">(optioneel)</span></p>
+            <textarea class="vl-textarea" name="Q19" rows="3"></textarea>
+          </div>
+
+          <div class="vl-question" data-qid="Q20" data-type="choice">
+            <p class="vl-question-num">Q20</p>
+            <p class="vl-question-text">Zou je deze installatie aanraden aan een buur of familielid?</p>
+            <div class="vl-choices">
+              <label class="vl-choice"><input type="radio" name="Q20" value="Ja"><span>Ja</span></label>
+              <label class="vl-choice"><input type="radio" name="Q20" value="Misschien"><span>Misschien</span></label>
+              <label class="vl-choice"><input type="radio" name="Q20" value="Nee"><span>Nee</span></label>
+            </div>
+          </div>
+
+          <div class="vl-question" data-qid="Q21" data-type="choice">
+            <p class="vl-question-num">Q21: Tot slot</p>
+            <p class="vl-question-text">In welke leeftijdscategorie val je?</p>
+            <div class="vl-choices">
+              <label class="vl-choice"><input type="radio" name="Q21" value="onder 18"><span>Onder 18</span></label>
+              <label class="vl-choice"><input type="radio" name="Q21" value="18-29"><span>18 tot 29</span></label>
+              <label class="vl-choice"><input type="radio" name="Q21" value="30-44"><span>30 tot 44</span></label>
+              <label class="vl-choice"><input type="radio" name="Q21" value="45-59"><span>45 tot 59</span></label>
+              <label class="vl-choice"><input type="radio" name="Q21" value="60-74"><span>60 tot 74</span></label>
+              <label class="vl-choice"><input type="radio" name="Q21" value="75+"><span>75 of ouder</span></label>
+              <label class="vl-choice"><input type="radio" name="Q21" value="liever niet zeggen"><span>Liever niet zeggen</span></label>
+            </div>
+          </div>
+        </section>
+
+        <div class="vl-submit-wrap">
+          <button type="submit" id="vlSubmit" class="btn-primary">Verstuur antwoorden</button>
+        </div>
+      </form>
+
+      <section id="vlThanks" class="vl-thanks is-hidden">
+        <h2>Bedankt!</h2>
+        <p>
+          Je antwoorden zijn opgeslagen. Hartelijk dank voor het meedoen aan de
+          alfatest: je input helpt ons de installatie te verbeteren.
+        </p>
+      </section>
+    </div>
+    <div class="lang-flag" role="img" aria-label="Taal: Nederlands"></div>
+
+    <script src="./tracking.js"></script>
+    <script>
+      (function () {
+        const ENDPOINT = "./tracker.php";
+        const STORAGE_KEY = "ehc_sessie_id";
+        let sessieId = "";
+        try { sessieId = localStorage.getItem(STORAGE_KEY) || ""; } catch (_) {}
+
+        // Info-knoppen togglen het bijbehorende info-paneel.
+        document.querySelectorAll(".vl-info-btn").forEach((btn) => {
+          btn.addEventListener("click", () => {
+            const key = btn.getAttribute("data-info");
+            const panel = document.querySelector(
+              '.vl-info-panel[data-info-target="' + key + '"]'
+            );
+            if (!panel) return;
+            const isOpen = !panel.hasAttribute("hidden");
+            if (isOpen) panel.setAttribute("hidden", "");
+            else panel.removeAttribute("hidden");
+            btn.setAttribute("aria-expanded", isOpen ? "false" : "true");
+          });
+        });
+
+        // Visuele selectie voor radio-knoppen (label-styling).
+        document.querySelectorAll(".vl-question").forEach((q) => {
+          const radios = q.querySelectorAll("input[type='radio']");
+          radios.forEach((r) => {
+            r.addEventListener("change", () => {
+              q.querySelectorAll(".vl-choice").forEach((c) =>
+                c.classList.toggle("is-selected", c.contains(r) && r.checked)
+              );
+            });
+          });
+        });
+
+        // Q8 alleen tonen als Q7 = Nee.
+        const q8 = document.querySelector('.vl-question[data-qid="Q8"]');
+        function refreshQ8() {
+          const sel = document.querySelector('input[name="Q7"]:checked');
+          if (!q8) return;
+          q8.style.display = sel && sel.value === "Nee" ? "" : "none";
+        }
+        document.querySelectorAll('input[name="Q7"]').forEach((r) =>
+          r.addEventListener("change", refreshQ8)
+        );
+        refreshQ8();
+
+        function postAnswer(qid, type, value) {
+          if (value === "" || value === null || value === undefined) return null;
+          const payload = {
+            sessie_id: sessieId,
+            pagina: "vragenlijst.html",
+            actie: "vragenlijst_antwoord",
+            element: qid + " (" + type + ")",
+            tijdstip: new Date().toISOString(),
+          };
+          if (type === "likert") {
+            const num = parseInt(value, 10);
+            if (!isNaN(num)) payload.feedback_score = num;
+            payload.feedback_tekst = String(value);
+          } else {
+            payload.feedback_tekst = String(value);
+          }
+          return fetch(ENDPOINT, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload),
+            keepalive: true,
+            mode: "cors",
+            credentials: "omit",
+          }).catch(() => {});
+        }
+
+        document.getElementById("vlForm").addEventListener("submit", function (e) {
+          e.preventDefault();
+          const btn = document.getElementById("vlSubmit");
+          btn.disabled = true;
+          btn.textContent = "Versturen…";
+
+          const promises = [];
+          document.querySelectorAll(".vl-question").forEach((q) => {
+            // Verborgen vragen (Q8 bij Q7≠Nee) overslaan.
+            if (q.style.display === "none") return;
+            const qid = q.getAttribute("data-qid");
+            const type = q.getAttribute("data-type") || "open";
+            const ta = q.querySelector("textarea");
+            const radio = q.querySelector("input[type='radio']:checked");
+            let value = "";
+            if (ta) value = ta.value.trim();
+            else if (radio) value = radio.value;
+            if (value === "") return;
+            const p = postAnswer(qid, type, value);
+            if (p) promises.push(p);
+          });
+
+          // Markeer einde vragenlijst: handig voor analyse.
+          promises.push(
+            fetch(ENDPOINT, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                sessie_id: sessieId,
+                pagina: "vragenlijst.html",
+                actie: "vragenlijst_voltooid",
+                element: "post_sessie",
+                tijdstip: new Date().toISOString(),
+              }),
+              keepalive: true,
+              mode: "cors",
+              credentials: "omit",
+            }).catch(() => {})
+          );
+
+          Promise.all(promises).then(() => {
+            document.getElementById("vlForm").classList.add("is-hidden");
+            const thanks = document.getElementById("vlThanks");
+            thanks.classList.remove("is-hidden");
+            thanks.scrollIntoView({ behavior: "smooth", block: "start" });
+          });
+        });
+      })();
+    </script>
+    <script src="./src/touch-bridge.js" defer></script>
+    <script src="./src/keyboard.js" defer></script>
+  </body>
+</html>

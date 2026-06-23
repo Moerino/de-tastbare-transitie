@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="nl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gevolgen van de hyperloop | EHC</title>
+    <link rel="stylesheet" href="./site.css" />
+    <link rel="stylesheet" href="./tracking.css" />
+    <link rel="stylesheet" href="./keyboard.css" />
+  </head>
+  <body>
+    <div class="page-shell">
+      <h1 class="gevolgen-title">Wat merk je ervan in de buurt?</h1>
+      <div class="gevolgen-split">
+        <div>
+          <p>
+            De hyperloop komt dichtbij. In Veendam wordt er buiten getest, wat gevolgen heeft voor de omgeving.
+          </p>
+          <p>
+            Wil je weten wat er bij jou in de buurt verandert? Pak de kaart erbij, plan een route, vergelijk de hyperloop met de trein, auto of het vliegtuig en zie zelf het verschil.
+          </p>
+        </div>
+        <div class="gevolgen-map-col">
+          <div class="map-preview-wrap" id="mapPreviewWrap">
+            <iframe
+              id="mapPreviewFrame"
+              title="Animatie hyperloop-route Groningen naar Barcelona"
+              src="./map-preview-anim.html"
+              loading="lazy"
+            ></iframe>
+            <div class="map-preview-hit" id="mapPreviewHit" role="button" tabindex="0" aria-label="Tik om kaart te activeren"></div>
+            <div class="map-preview-cta">
+              <button type="button" class="btn-primary" id="tryMapBtn">Probeer het zelf!</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="gevolgen-columns">
+        <div>
+          <h3>Geluid</h3>
+          <p>
+            Denk aan een goederentrein die langs je huis raast: ramen rinkelen, je kopje trilt in de kast. De hyperloop is bewust ontworpen om daar duidelijk onder te blijven.
+          </p>
+          <p>
+            De capsule zweeft op magneten en raakt de buis niet aan. Daardoor is er nauwelijks spoor- of motorgeluid te horen in de buurt.
+          </p>
+          <p>
+            <button type="button" class="info-trigger" id="dbInfoTrigger" aria-expanded="false" aria-controls="dbInfoPopup">
+              <span class="info-icon" aria-hidden="true">i</span>
+              Hoe lees je decibel (dB)?
+            </button>
+          </p>
+        </div>
+        <div>
+          <h3>Trillingen</h3>
+          <p>
+            Bij een trein gaan de stalen wielen rechtstreeks door het spoor. Je voelt dat in de grond én in huis.
+          </p>
+          <p>
+            Een zwevende capsule in een gesloten buis geeft die trilling veel minder door. Zo blijft het in de omgeving rustiger, ook gevoelsmatig.
+          </p>
+        </div>
+        <div>
+          <h3>Veiligheid</h3>
+          <p>
+            Veiligheid staat aan de basis van het ontwerp. Sensoren houden de hele buis in de gaten. Zodra er iets afwijkt, remt de capsule automatisch af.
+          </p>
+          <p>
+            Omdat er bijna geen zuurstof in de buis zit, is er ook weinig ruimte voor open vuur. Een brand zoals je die buiten de buis kent, kan binnen het traject vrijwel niet ontstaan.
+          </p>
+        </div>
+      </div>
+
+      <footer class="page-footer-actions">
+        <a class="btn-primary" href="./je-stem.html">Jouw stem</a>
+        <p class="back-to-menu"><a class="back-link" href="./index.html">← Terug naar hoofdmenu</a></p>
+      </footer>
+    </div>
+    <div class="lang-flag" role="img" aria-label="Taal: Nederlands"></div>
+
+    <!-- dB-uitleg popup. Verborgen tot de gebruiker op de info-knop klikt. -->
+    <div class="info-popup-backdrop" id="dbInfoBackdrop" hidden></div>
+    <div class="info-popup" id="dbInfoPopup" role="dialog" aria-labelledby="dbInfoTitle" aria-modal="true" hidden>
+      <button type="button" class="info-popup-close" id="dbInfoClose" aria-label="Sluiten">×</button>
+      <h4 id="dbInfoTitle">Hoe lees je decibel (dB)?</h4>
+      <p>
+        De dB-schaal is niet lineair maar logaritmisch: elke +10 dB voelt ongeveer twee keer zo luid aan, terwijl de geluidsenergie zelfs tien keer zo groot wordt.
+      </p>
+      <p>
+        Een trein van 75 dB klinkt voor jouw oor dus ongeveer dubbel zo hard als een hyperloop van 65 dB.
+      </p>
+    </div>
+
+    <script>
+      (function () {
+        const trigger = document.getElementById("dbInfoTrigger");
+        const popup = document.getElementById("dbInfoPopup");
+        const backdrop = document.getElementById("dbInfoBackdrop");
+        const closeBtn = document.getElementById("dbInfoClose");
+        if (!trigger || !popup) return;
+
+        function open() {
+          popup.hidden = false;
+          backdrop.hidden = false;
+          trigger.setAttribute("aria-expanded", "true");
+          document.addEventListener("keydown", onKey);
+        }
+        function close() {
+          popup.hidden = true;
+          backdrop.hidden = true;
+          trigger.setAttribute("aria-expanded", "false");
+          document.removeEventListener("keydown", onKey);
+        }
+        function onKey(e) {
+          if (e.key === "Escape") close();
+        }
+        trigger.addEventListener("click", () => {
+          popup.hidden ? open() : close();
+        });
+        closeBtn.addEventListener("click", close);
+        backdrop.addEventListener("click", close);
+      })();
+    </script>
+
+    <script>
+      (function () {
+        const wrap = document.getElementById("mapPreviewWrap");
+        const hit = document.getElementById("mapPreviewHit");
+        const iframe = document.getElementById("mapPreviewFrame");
+        const btn = document.getElementById("tryMapBtn");
+
+        function notifyInvalidate() {
+          try {
+            iframe.contentWindow.postMessage("ehc-map-invalidate", "*");
+          } catch (_) {}
+        }
+
+        function revealCta() {
+          wrap.classList.add("is-tapped");
+          notifyInvalidate();
+        }
+
+        hit.addEventListener("click", revealCta);
+        hit.addEventListener("keydown", (e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            revealCta();
+          }
+        });
+
+        btn.addEventListener("click", (e) => {
+          e.stopPropagation();
+          window.location.href = "./map-app.html";
+        });
+
+        iframe.addEventListener("load", () => {
+          notifyInvalidate();
+          [200, 600, 1400].forEach((ms) => setTimeout(notifyInvalidate, ms));
+        });
+
+        const ro = new ResizeObserver(() => notifyInvalidate());
+        ro.observe(wrap);
+      })();
+    </script>
+    <script src="./src/idle-timeout.js" defer></script>
+    <script src="./tracking.js" defer></script>
+    <script src="./src/touch-bridge.js" defer></script>
+    <script src="./src/keyboard.js" defer></script>
+  </body>
+</html>

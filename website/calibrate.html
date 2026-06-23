@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="nl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kalibratie — HyperBRIDGE</title>
+    <style>
+      html, body {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        overflow: hidden;
+        background: #491303; /* Primary 900 */
+        color: #fff7f5;
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      }
+      body {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        text-align: center;
+      }
+      .corner {
+        position: absolute;
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        background: radial-gradient(circle, #f77c58 0%, #c83509 70%, transparent 100%);
+        border: 4px solid #ffffff;
+        box-shadow: 0 0 40px rgba(247, 124, 88, 0.8);
+        transform: translate(-50%, -50%);
+        z-index: 10;
+        animation: pulse 1.4s ease-in-out infinite;
+      }
+      @keyframes pulse {
+        0%, 100% { transform: translate(-50%, -50%) scale(1); }
+        50%      { transform: translate(-50%, -50%) scale(1.18); }
+      }
+      .corner.done {
+        animation: none;
+        background: radial-gradient(circle, #22c55e 0%, #166534 70%, transparent 100%);
+      }
+      .corner-1 { top: 60px; left: 60px; }
+      .corner-2 { top: 60px; right: 60px; left: auto; transform: translate(50%, -50%); }
+      .corner-3 { bottom: 60px; right: 60px; left: auto; top: auto; transform: translate(50%, 50%); }
+      .corner-4 { bottom: 60px; left: 60px; top: auto; transform: translate(-50%, 50%); }
+      .label {
+        max-width: 720px;
+        padding: 32px;
+        font-size: 1.4rem;
+        font-weight: 600;
+        line-height: 1.4;
+      }
+      .step {
+        font-size: 0.9rem;
+        opacity: 0.7;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        margin-bottom: 12px;
+      }
+      .meta {
+        position: absolute;
+        bottom: 18px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 0.85rem;
+        opacity: 0.5;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="corner corner-1" id="c1" data-corner="0"></div>
+    <div class="corner corner-2" id="c2" data-corner="1"></div>
+    <div class="corner corner-3" id="c3" data-corner="2"></div>
+    <div class="corner corner-4" id="c4" data-corner="3"></div>
+    <div class="label">
+      <div class="step" id="stepLabel">Stap 1 van 4</div>
+      <div id="instruction">Raak met je <strong>wijsvinger</strong> de pulserende hoek <strong>linksboven</strong> aan.</div>
+    </div>
+    <div class="meta">Scherm: <span id="resInfo"></span></div>
+
+    <script>
+      const corners = [
+        { id: "c1", name: "linksboven" },
+        { id: "c2", name: "rechtsboven" },
+        { id: "c3", name: "rechtsonder" },
+        { id: "c4", name: "linksonder" },
+      ];
+      let step = 0;
+      const stepLabel = document.getElementById("stepLabel");
+      const instruction = document.getElementById("instruction");
+      document.getElementById("resInfo").textContent =
+        `${window.innerWidth} × ${window.innerHeight}`;
+
+      function highlight() {
+        corners.forEach((c, i) => {
+          const el = document.getElementById(c.id);
+          el.classList.toggle("done", i < step);
+          el.style.zIndex = i === step ? 20 : 5;
+        });
+        stepLabel.textContent = `Stap ${step + 1} van 4`;
+        if (step >= corners.length) {
+          instruction.innerHTML = "Klaar! Sluit dit venster.";
+          stepLabel.textContent = "voltooid";
+        } else {
+          instruction.innerHTML = `Raak met je <strong>wijsvinger</strong> de pulserende hoek <strong>${corners[step].name}</strong> aan.`;
+        }
+      }
+
+      // Klik op een hoek registreert. Calibrate_dual.py polled deze status
+      // via een ?step=N URL-parameter route — voor nu doen we het ook lokaal
+      // zichtbaar zodat de gebruiker weet dat hij is geregistreerd.
+      // De Python tool detecteert de wijsvingerpositie zelfstandig in het
+      // cam-beeld; dit scherm dient als visueel doel.
+
+      // Snelle bediening voor handmatige bevestiging (klik/tik op de hoek).
+      corners.forEach((c, i) => {
+        document.getElementById(c.id).addEventListener("click", () => {
+          if (i !== step) return;
+          step++;
+          highlight();
+          // Geef de Python tool een ping via fetch (best-effort).
+          fetch(`http://localhost:8766/corner?step=${i + 1}`, { mode: "no-cors" }).catch(() => {});
+        });
+      });
+
+      highlight();
+
+      // Toetsenbord shortcuts voor de operator (escape laat ze opnieuw beginnen).
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "r" || e.key === "R") {
+          step = 0;
+          highlight();
+        }
+      });
+    </script>
+  </body>
+</html>
